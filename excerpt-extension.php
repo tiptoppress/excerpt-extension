@@ -15,6 +15,19 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 const TEXTDOMAIN = 'term-posts-style-extension';
 
+function apply_the_excerpt($text) {
+	$ret = "";	
+	$text = \wp_trim_words( $text );	
+	$ret = $text;
+	return $ret;
+}
+
+function apply_the_excerpt_social($text) {
+	$ret = "";
+	$ret = $text;
+	return $ret;
+}
+
 /**
  * Filter to call functions
  *
@@ -32,14 +45,19 @@ function cpwp_before_widget($widget,$instance) {
 	// Excerpt length filter
 	if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 &&
 			isset($instance["excerpt_override_length"]) && $instance["excerpt_override_length"]) {
-		add_filter('excerpt_length', 'excerpt_length_filter', 9999);
+		add_filter('excerpt_length', array($widget, 'excerpt_length_filter'), 9999);
 	}
 	
 	if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' &&
 			isset($instance["excerpt_override_more_text"]) && $instance["excerpt_override_more_text"])
 	{
-		add_filter('excerpt_more', 'excerpt_more_filter', 9999);
+		add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 9999);
 	}
+	
+	if (isset($instance["hide_social_buttons"]) && $instance["hide_social_buttons"])
+		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt');
+	else
+		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social');
 }
 
 add_action('cpwp_before_widget',__NAMESPACE__.'\cpwp_before_widget',10,2);
@@ -84,6 +102,12 @@ function cpwp_after_footer_panel($widget,$instance) {
 			Set the option Post details panel > Show post excerpt > Themes and plugins may override.
 		</p>
 	</div>
+	<p>
+ 		<label for="<?php echo $widget->get_field_id("hide_social_buttons"); ?>">
+ 			<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_social_buttons"); ?>" name="<?php echo $widget->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
+ 				<?php _e( 'Hide social buttons in widget output',TEXTDOMAIN ); ?>
+ 		</label>
+ 	</p>
 </div>
 <?php	
 }
