@@ -15,16 +15,27 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 const TEXTDOMAIN = 'term-posts-style-extension';
 
-function apply_the_excerpt($text) {
-	$ret = "";	
-	$text = \wp_trim_words( $text );	
-	$ret = $text;
-	return $ret;
-}
+function apply_the_excerpt_social_buttons($text) {
 
-function apply_the_excerpt_social($text) {
 	$ret = "";
-	$ret = $text;
+	if (isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"])
+	{
+		global $settings;		
+
+		$more_text = '[&hellip;]';
+		if( isset($settings["excerpt_more_text"]) && $settings["excerpt_more_text"] )
+			$more_text = ltrim($settings["excerpt_more_text"]);
+
+		if ($everything_is_link)
+			$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
+		else
+			$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+		$ret = \wp_trim_words( $text, $length, $excerpt_more_text );
+	}
+	else {
+		$ret = "";
+		$ret = $text;
+	}
 	return $ret;
 }
 
@@ -36,6 +47,9 @@ function apply_the_excerpt_social($text) {
  *
  */
 function cpwp_before_widget($widget,$instance) {
+
+	global $settings;
+	$settings = $instance;
 
 	if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
 		$length = (int) $instance['excerpt_length'];
@@ -54,10 +68,7 @@ function cpwp_before_widget($widget,$instance) {
 		add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 9999);
 	}
 	
-	if (isset($instance["hide_social_buttons"]) && $instance["hide_social_buttons"])
-		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt');
-	else
-		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social');
+	add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons');
 }
 
 add_action('cpwp_before_widget',__NAMESPACE__.'\cpwp_before_widget',10,2);
