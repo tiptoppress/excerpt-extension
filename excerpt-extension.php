@@ -15,13 +15,20 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 const TEXTDOMAIN = 'term-posts-style-extension';
 
+/**
+ * Excerpt disable/show social buttons, banner, etc.
+ *
+ * @param excerpt text
+ * @return excerpt with social buttons, banner, etc. or not
+ *
+ */
 function apply_the_excerpt_social_buttons($text) {
 
+	global $settings;	
+		
 	$ret = "";
 	if (isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"])
 	{
-		global $settings;		
-
 		$more_text = '[&hellip;]';
 		if( isset($settings["excerpt_more_text"]) && $settings["excerpt_more_text"] )
 			$more_text = ltrim($settings["excerpt_more_text"]);
@@ -37,6 +44,45 @@ function apply_the_excerpt_social_buttons($text) {
 		$ret = $text;
 	}
 	return $ret;
+}
+
+/**
+ * Excerpt allow HTML
+ *
+ * @param excerpt text
+ * @return excerpt with allowed html
+ *
+ */
+function allow_html_excerpt($text) {
+
+	global $settings, $wp_filter;
+
+	$allowed_elements = '<script>,<style>,<br>,<em>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<video>,<audio>';
+	$new_excerpt_length = ( isset($settings["excerpt_length"]) && $settings["excerpt_length"] > 0 ) ? $settings["excerpt_length"] : 55;
+	// if ( '' == $text ) {
+		$text = get_the_content('');
+		$text = strip_shortcodes( $text );
+		$text = apply_filters('the_content', $text);
+		$text = str_replace('\]\]\>', ']]&gt;', $text);
+		$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);		
+		$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
+		$excerpt_length = $new_excerpt_length;		
+		if( !empty($settings["excerpt_more_text"]) ) {
+			$excerpt_more = $this->excerpt_more_filter($settings["excerpt_more_text"]); 
+		}else if($filterName = key($wp_filter['excerpt_more'][10])) {
+			$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
+		}else {
+			$excerpt_more = '[...]';
+		}
+		
+		$words = explode(' ', $text, $excerpt_length + 1);
+		if (count($words)> $excerpt_length) {
+			array_pop($words);
+			array_push($words, $excerpt_more);
+			$text = implode(' ', $words);
+		}
+	// }
+	return '<p>' . $text . '</p>';
 }
 
 /**
@@ -69,6 +115,12 @@ function cpwp_before_widget($widget,$instance) {
 	}
 	
 	add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons');
+
+	if(isset($instance['allow_html_excerpt']) && ($instance['allow_html_excerpt']))
+	{
+		remove_filter('get_the_excerpt', 'wp_trim_excerpt');
+		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\allow_html_excerpt');
+	}
 }
 
 add_action('cpwp_before_widget',__NAMESPACE__.'\cpwp_before_widget',10,2);
@@ -87,10 +139,12 @@ function cpwp_after_footer_panel($widget,$instance) {
 		'excerpt_override_length'    => false,
 		'excerpt_override_more_text' => false,
 		'hide_social_buttons'        => false,
+		'allow_html_excerpt'         => false,
 	) );
 	$excerpt_override_length         = $instance['excerpt_override_length'];
 	$excerpt_override_more_text      = $instance['excerpt_override_more_text'];
 	$hide_social_buttons             = $instance['hide_social_buttons'];
+	$allow_html_excerpt              = $instance['allow_html_excerpt'];
 ?>
 <h4 style="background-color: rgba(168, 220, 0, 0.29);" data-panel="excerpt-extension"><?php _e('More Excerpt Options',TEXTDOMAIN);?></h4>
 <div>
@@ -117,6 +171,12 @@ function cpwp_after_footer_panel($widget,$instance) {
  		<label for="<?php echo $widget->get_field_id("hide_social_buttons"); ?>">
  			<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_social_buttons"); ?>" name="<?php echo $widget->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
  				<?php _e( 'Hide social buttons in widget output',TEXTDOMAIN ); ?>
+ 		</label>
+ 	</p>
+	<p>
+ 		<label for="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>">
+ 			<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name("allow_html_excerpt"); ?>"<?php checked( (bool) $instance["allow_html_excerpt"], true ); ?> />
+ 				<?php _e( 'Allow HTML in the excerpt',TEXTDOMAIN ); ?>
  		</label>
  	</p>
 </div>
