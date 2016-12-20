@@ -13,6 +13,9 @@ A free extension for the premium widget Term and Category Based Posts Widget ava
 ## Description
 The Excerpt Extension adds more options for the excerpt output.
 
+## Screenshot
+1. ![Added panel for More excerpt options](/screenshot-1.png "Added panel for More excerpt options")
+
 ### Contribute
 While using this plugin if you find any bug or any conflict, please submit an issue at 
 [Github](https://github.com/tiptoppress/term-posts-excerpt-extension) (If possible with a pull request). 
