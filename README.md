@@ -20,13 +20,16 @@ The Excerpt Extension adds more options for the excerpt output.
 * Option to hide social buttons, banners, shortcodes and more used in the excerpt
 
 ## Screenshot
-Adds a panel for More excerpt options
+1. Adds a panel for More excerpt options
+
 ![Adds a panel for More excerpt options](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-1.PNG?raw=true "Adds a panel for More excerpt options")
 
-Allow HTML in the excerpt
- ![Allow HTML in the excerpt](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-2.PNG?raw=true "Allow HTML in the excerpt")
+2. Allow HTML in the excerpt
 
-Solves the double rendered shortcode bug in the excerpt
+![Allow HTML in the excerpt](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-2.PNG?raw=true "Allow HTML in the excerpt")
+
+3. Solves the double rendered shortcode bug in the excerpt
+
 ![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-3.PNG?raw=true "Solves the double rendered shortcode bug in the excerpt")
 
 
