@@ -29,14 +29,17 @@ function apply_the_excerpt_social_buttons($text) {
 	$ret = "";
 	if (isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"])
 	{
+		// length
+		if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
+			$length = (int) $instance['excerpt_length'];
+		else 
+			$length = 55; // use default
+	
+		// more text
 		$more_text = '[&hellip;]';
 		if( isset($settings["excerpt_more_text"]) && $settings["excerpt_more_text"] )
 			$more_text = ltrim($settings["excerpt_more_text"]);
-
-		if ($everything_is_link)
-			$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
-		else
-			$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+		$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 		$ret = \wp_trim_words( $text, $length, $excerpt_more_text );
 	}
 	else {
@@ -68,7 +71,7 @@ function allow_html_excerpt($text) {
 		$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
 		$excerpt_length = $new_excerpt_length;		
 		if( !empty($settings["excerpt_more_text"]) ) {
-			$excerpt_more = $this->excerpt_more_filter($settings["excerpt_more_text"]); 
+			add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 9999);
 		}else if($filterName = key($wp_filter['excerpt_more'][10])) {
 			$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
 		}else {
