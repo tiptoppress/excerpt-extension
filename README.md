@@ -3,6 +3,8 @@ Term and Category Based Posts Excerpt Extension
 
 A free extension for the premium widget Term and Category Based Posts Widget available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=description_tpee&utm_medium=web">tiptoppress.com</a>.
 
+**Requires:** Term and Category Based Posts Widget 4.7 or higher
+
 **Contributors:** DanielFloeter
   
 **License:** GPLv2 or later 
