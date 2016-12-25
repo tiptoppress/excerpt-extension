@@ -20,11 +20,12 @@ The Excerpt Extension adds more options for the excerpt output.
 * Option to override Theme and plugin excerpt lenght filters
 * Option to override Theme and plugin excerpt more filters
 * Option to hide social buttons, banners, shortcodes and more used in the excerpt
+* Option to show social buttons, banners, shortcodes and more only once in the outputed excerpt
 
 ## Screenshot
-Adds a panel for More excerpt options
+Adds more options for the excerpt output
 
-![Adds a panel for More excerpt options](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-1.PNG?raw=true "Adds a panel for More excerpt options")
+![Adds more options for the excerpt output](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-1.PNG?raw=true "Adds more options for the excerpt output")
 
 Allow HTML in the excerpt
 
@@ -52,3 +53,4 @@ While using this plugin if you find any bug or any conflict, please submit an is
 * Add a option to override Theme and plugin excerpt lenght filters
 * Add a option to override Theme and plugin excerpt more filters
 * Add a option to hide social buttons, banners, shortcodes and more used in the excerpt
+* Add a option to show social buttons, banners, shortcodes and more only once in the outputed excerpt

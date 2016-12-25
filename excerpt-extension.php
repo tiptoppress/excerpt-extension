@@ -184,13 +184,13 @@ function cpwp_details_panel_bottom_excerpt($widget,$instance,$alt_prefix) {
 	<p>
 		<label style="color:#61a000;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>">
 			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
-			<?php _e( 'Native excerpt length','category-posts' ); ?>
+			<?php _e( 'Use widget excerpt length','category-posts' ); ?>
 		</label>
 	</p>
 	<p>
 		<label style="color:#61a000;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>">
 			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
-			<?php _e( 'Native excerpt \'more\' text','category-posts' ); ?>
+			<?php _e( 'Use widget excerpt \'more\' text','category-posts' ); ?>
 		</label>
 	</p>
 	<p>
