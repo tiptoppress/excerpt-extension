@@ -15,6 +15,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 const TEXTDOMAIN = 'term-posts-style-extension';
 
+
 /**
  * Excerpt disable/show social buttons, banner, etc.
  *
@@ -41,10 +42,16 @@ function apply_the_excerpt_social_buttons($text) {
 			$more_text = ltrim($settings["excerpt_more_text"]);
 		$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 		$ret = \wp_trim_words( $text, $length, $excerpt_more_text );
-	}
+	} 
 	else {
-		$ret = "";
-		$ret = $text;
+		if (isset($settings["show_social_buttons_only_once"]) && $settings["show_social_buttons_only_once"]) {
+			$ret = $text;
+			remove_all_filters('the_content');
+		 }
+		else {
+			$ret = "";
+			$ret = $text;
+		}
 	}
 	return $ret;
 }
@@ -161,15 +168,17 @@ add_action('cpwp_after_itemHTML',__NAMESPACE__.'\cpwp_after_itemHTML',10,2);
 function cpwp_details_panel_bottom_excerpt($widget,$instance,$alt_prefix) {
 	
 	$instance = wp_parse_args( ( array ) $instance, array(
-		$alt_prefix.'excerpt_override_length'    => false,
-		$alt_prefix.'excerpt_override_more_text' => false,
-		$alt_prefix.'hide_social_buttons'        => false,
-		$alt_prefix.'allow_html_excerpt'         => false,
+		$alt_prefix.'excerpt_override_length'       => false,
+		$alt_prefix.'excerpt_override_more_text'    => false,
+		$alt_prefix.'hide_social_buttons'           => false,
+		$alt_prefix.'allow_html_excerpt'            => false,
+		$alt_prefix.'show_social_buttons_only_once' => false,
 	) );
 	$excerpt_override_length         = $instance[$alt_prefix.'excerpt_override_length'];
 	$excerpt_override_more_text      = $instance[$alt_prefix.'excerpt_override_more_text'];
 	$hide_social_buttons             = $instance[$alt_prefix.'hide_social_buttons'];
 	$allow_html_excerpt              = $instance[$alt_prefix.'allow_html_excerpt'];
+	$show_social_buttons_only_once   = $instance[$alt_prefix.'show_social_buttons_only_once'];
 ?>
 <div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="display:<?php echo ((bool) $instance[$alt_prefix.'excerpt_filters']) ? 'block' : 'none'?>">
 	<p>
@@ -190,14 +199,18 @@ function cpwp_details_panel_bottom_excerpt($widget,$instance,$alt_prefix) {
 				<?php _e( 'Allow HTML in the excerpt',TEXTDOMAIN ); ?>
 		</label>
 	</p>
-	<!--
 	<p>
  		<label style="color:#61a000;" for="<?php echo $widget->get_field_id("hide_social_buttons"); ?>">
  			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_social_buttons"); ?>" name="<?php echo $widget->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
- 				<?php _e( 'Hide social buttons in widget output',TEXTDOMAIN ); ?>
+ 				<?php _e( 'Hide social buttons',TEXTDOMAIN ); ?>
  		</label>
  	</p>
-	-->
+	<p>
+ 		<label style="color:#61a000;" for="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>">
+ 			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>" name="<?php echo $widget->get_field_name("show_social_buttons_only_once"); ?>"<?php checked( (bool) $instance["show_social_buttons_only_once"], true ); ?> />
+ 				<?php _e( 'Show social buttons only once',TEXTDOMAIN ); ?>
+ 		</label>
+ 	</p>
 </div>
 <?php	
 }
@@ -214,9 +227,15 @@ function cpwp_default_settings($setting) {
 
 	return wp_parse_args( ( array ) $setting, array(
 		'excerpt_override_length'           => false,
-		'excerpt_override_more_text'        => false,		
+		'excerpt_override_more_text'        => false,
+		'hide_social_buttons'               => false,
+		'allow_html_excerpt'                => false,
+		'show_social_buttons_only_once'     => false,
 		'alt_excerpt_override_length'       => false,
 		'alt_excerpt_override_more_text'    => false,
+		'alt_hide_social_buttons'           => false,
+		'alt_allow_html_excerpt'            => false,
+		'alt_show_social_buttons_only_once' => false,
 	) );
 }
 
