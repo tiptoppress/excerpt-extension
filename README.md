@@ -45,7 +45,7 @@ While using this plugin if you find any bug or any conflict, please submit an is
 2. Download the widget excension.
 3. Upload it to the plugins folder of your blog.
 4. Activate the plugin through the 'Plugins' menu in WordPress
-5. Now, goto the Widgets page of the Appearance section and configure the Category Posts widget.
+5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
 
 ## Changelog
 #### 0.1 - December 17th 2016

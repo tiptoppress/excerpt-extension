@@ -13,7 +13,7 @@ namespace termCategoryPostsPro\excerptExtension;
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-const TEXTDOMAIN = 'term-posts-style-extension';
+const TEXTDOMAIN = 'excerpt-extension';
 
 
 /**
