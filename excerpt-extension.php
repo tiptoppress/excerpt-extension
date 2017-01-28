@@ -252,7 +252,7 @@ add_filter('cpwp_default_settings',__NAMESPACE__.'\cpwp_default_settings');
  */
 function add_action_links ( $links ) {
     $pro_link = array(
-        '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=action_link">'.__('Get the expected pro widget','category-posts').'</a>',
+        '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_eext&utm_campaign=get_pro_eext&utm_medium=action_link">'.__('Get the expected pro widget','category-posts').'</a>',
     );
 	
 	$links = array_merge($pro_link, $links);
