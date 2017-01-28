@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Term and Category Based Posts Widget Excerpt Extension
+Plugin Name: Excerpt Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
-Description: Adds more excerpt options to the details pannel in the widgets admin
+Description: Adds more excerpt options to the details pannel in the widgets admin from the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
 Version: 0.1
 Author URI: http://tiptoppress.com
@@ -241,4 +241,23 @@ function cpwp_default_settings($setting) {
 
 add_filter('cpwp_default_settings',__NAMESPACE__.'\cpwp_default_settings');
 
+// Plugin action links section
 
+/**
+ *  Applied to the list of links to display on the plugins page (beside the activate/deactivate links).
+ *  
+ *  @return array of the widget links
+ *  
+ *  @since 0.1
+ */
+function add_action_links ( $links ) {
+    $pro_link = array(
+        '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=action_link">'.__('Get the expected pro widget','category-posts').'</a>',
+    );
+	
+	$links = array_merge($pro_link, $links);
+    
+    return $links;
+}
+
+add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), __NAMESPACE__.'\add_action_links' );
