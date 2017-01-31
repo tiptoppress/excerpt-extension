@@ -10,9 +10,11 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 A free extension for the premium widget Term and Category Based Posts Widget
 
 == Description ==
+
 The Excerpt Extension adds more options for the excerpt output. Term and Category Based Posts Widget is available here [tiptoppress.com](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_tpee&utm_medium=web).
 
 = Features =
+
 * Option to allow HTML in the excerpt
 * Option to override Theme and plugin excerpt lenght filters
 * Option to override Theme and plugin excerpt more filters
@@ -24,6 +26,7 @@ While using this plugin if you find any bug or any conflict, please submit an is
 [Github](https://github.com/tiptoppress/term-posts-excerpt-extension) (If possible with a pull request). 
 
 == Installation ==
+
 = Automatic installation =
 Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t need to leave your web browser. To do an automatic install of Category Posts Widget, 
 
@@ -34,6 +37,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
 
 = Manual installation =
+
 1. The premium widget <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web">Term and Category Based Posts Widget</a> is being expected.
 2. Download the Excerpt Extension.
 3. Upload it to the plugins folder of your blog.
@@ -41,6 +45,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
 
 == Frequently Asked Questions ==
+
 = I can't see the widget =
 This is only a extension for the premium widget Term and Category Based Posts Widget.
 The premium widget <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web">Term and Category Based Posts Widget</a> is being expected.
@@ -51,6 +56,7 @@ The premium widget <a target="_blank" href="http://tiptoppress.com/?utm_source=g
 3. Solves the double rendered shortcode bug in the excerpt.
 
 == Changelog ==
+
 = 0.1 - December 17th 2016 =
 * Add a option to allow HTML in the excerpt
 * Add a option to override Theme and plugin excerpt lenght filters
