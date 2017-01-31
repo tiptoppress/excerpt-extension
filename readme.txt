@@ -1,4 +1,4 @@
-=== Term and Category Based Posts Excerpt Extension ===
+=== Excerpt Extension ===
 Contributors: kometschuh
 Tags: content, formatting, post, post-excerpt, excerpt
 Requires at least: 2.8
@@ -46,9 +46,9 @@ This is only a extension for the premium widget Term and Category Based Posts Wi
 The premium widget <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web">Term and Category Based Posts Widget</a> is being expected.
 
 == Screenshots ==
-1. Adds more options for the excerpt output
-2. Allow HTML in the excerpt
-3. Solves the double rendered shortcode bug in the excerpt
+1. Adds more options for the excerpt output.
+2. Allow HTML in the excerpt.
+3. Solves the double rendered shortcode bug in the excerpt.
 
 == Changelog ==
 = 0.1 - December 17th 2016 =
