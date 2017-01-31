@@ -38,7 +38,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 = Manual installation =
 
-1. The premium widget <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web">Term and Category Based Posts Widget</a> is being expected.
+1. The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web) is being expected.
 2. Download the Excerpt Extension.
 3. Upload it to the plugins folder of your blog.
 4. Activate the plugin through the 'Plugins' menu in WordPress
@@ -48,9 +48,10 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 = I can't see the widget =
 This is only a extension for the premium widget Term and Category Based Posts Widget.
-The premium widget <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web">Term and Category Based Posts Widget</a> is being expected.
+The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web) is being expected.
 
 == Screenshots ==
+
 1. Adds more options for the excerpt output.
 2. Allow HTML in the excerpt.
 3. Solves the double rendered shortcode bug in the excerpt.
