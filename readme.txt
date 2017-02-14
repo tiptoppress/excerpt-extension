@@ -13,6 +13,12 @@ A free extension for the premium widget Term and Category Based Posts Widget
 
 The Excerpt Extension adds more options for the excerpt output. Term and Category Based Posts Widget is available here [tiptoppress.com](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_tpee&utm_medium=web).
 
+= Try before buy =
+
+With the next Term and Category Based Posts Widget version 4.7 we will let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host ip of 127.0.0.1).
+
+A beta-4.7 can be downloaded here: http://tiptoppress.com/welcome-take-4-7-beta2-spin/ and the stable version is released within the next days.
+
 = Features =
 
 * Option to allow HTML in the excerpt
