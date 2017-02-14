@@ -1,7 +1,7 @@
 Term and Category Based Posts Excerpt Extension
 ===============================================
 
-A free extension for the premium widget Term and Category Based Posts Widget available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=description_tpee&utm_medium=web">tiptoppress.com</a>.
+A free extension for the premium widget Term and Category Based Posts Widget available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.
 
 **Requires:** Term and Category Based Posts Widget 4.7 or higher
 
@@ -14,6 +14,12 @@ A free extension for the premium widget Term and Category Based Posts Widget ava
 
 ## Description
 The Excerpt Extension adds more options for the excerpt output.
+
+### Try before buy
+
+With the next Term and Category Based Posts Widget version 4.7 we will let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host ip of 127.0.0.1).
+
+A beta-4.7 can be downloaded here: [Welcome take 4.7-beta2 spin](http://tiptoppress.com/welcome-take-4-7-beta2-spin/?utm_source=github&utm_campaign=try_befor_buy_eext&utm_medium=web) and the stable version is released within the next days.
 
 ### Features
 * Option to allow HTML in the excerpt
@@ -41,7 +47,7 @@ While using this plugin if you find any bug or any conflict, please submit an is
 [Github](https://github.com/tiptoppress/term-posts-excerpt-extension) (If possible with a pull request). 
 
 ## Installation
-1. The premium widget <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web">Term and Category Based Posts Widget</a> is being expected.
+1. The premium widget <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=installation_eext&utm_medium=web">Term and Category Based Posts Widget</a> is being expected.
 2. Download the widget excension.
 3. Upload it to the plugins folder of your blog.
 4. Activate the plugin through the 'Plugins' menu in WordPress

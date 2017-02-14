@@ -11,13 +11,13 @@ A free extension for the premium widget Term and Category Based Posts Widget
 
 == Description ==
 
-The Excerpt Extension adds more options for the excerpt output. Term and Category Based Posts Widget is available here [tiptoppress.com](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_tpee&utm_medium=web).
+The Excerpt Extension adds more options for the excerpt output. Term and Category Based Posts Widget is available here [tiptoppress.com](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web).
 
 = Try before buy =
 
 With the next Term and Category Based Posts Widget version 4.7 we will let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host ip of 127.0.0.1).
 
-A beta-4.7 can be downloaded here: http://tiptoppress.com/welcome-take-4-7-beta2-spin/ and the stable version is released within the next days.
+A beta-4.7 can be downloaded here: http://tiptoppress.com/welcome-take-4-7-beta2-spin/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web and the stable version is released within the next days.
 
 = Features =
 
@@ -44,7 +44,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 = Manual installation =
 
-1. The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web) is being expected.
+1. The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/?utm_source=github&utm_campaign=installation_eext&utm_medium=web) is being expected.
 2. Download the Excerpt Extension.
 3. Upload it to the plugins folder of your blog.
 4. Activate the plugin through the 'Plugins' menu in WordPress
@@ -54,7 +54,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 = I can't see the widget =
 This is only a extension for the premium widget Term and Category Based Posts Widget.
-The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/?utm_source=github&utm_campaign=installation_tpee&utm_medium=web) is being expected.
+The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/?utm_source=github&utm_campaign=installation_eext&utm_medium=web) is being expected.
 
 == Screenshots ==
 
