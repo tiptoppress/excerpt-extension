@@ -371,10 +371,11 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 	</div>
 	<?php
 
-	return true;
+	return true; // return true: override the widget panel
 }
 
 add_filter('cpwp_details_panel',__NAMESPACE__.'\form_details_panel_filter',10,5);
+add_filter('cpwp_alt_details_panel',__NAMESPACE__.'\form_details_panel_filter',10,5);
 
 /**
  * Filter for the shortcode settings
