@@ -152,7 +152,6 @@ function cpwp_after_itemHTML($widget,$instance) {
 	remove_filter('excerpt_more', array($widget,'excerpt_more_filter'));
 	add_filter('get_the_excerpt', 'wp_trim_excerpt');
 	remove_filter('the_excerpt', array($widget,'apply_the_excerpt'));
-
 }
 
 add_action('cpwp_after_itemHTML',__NAMESPACE__.'\cpwp_after_itemHTML',10,2);
@@ -162,60 +161,220 @@ add_action('cpwp_after_itemHTML',__NAMESPACE__.'\cpwp_after_itemHTML',10,2);
  *
  * @param this
  * @param instance
- * @return outputs a new panel
+ * @param panel_id
+ * @param panel_name
+ * @param alt_prefix
+ * @return true: override the widget panel
  *
  */
-function cpwp_details_panel_bottom_excerpt($widget,$instance,$alt_prefix) {
-	
+function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_prefix) {
+	if (count($instance) == 0) { // new widget, use defaults
+		$instance = default_settings();
+	} else { // updated widgets come from =< 4.6 excerpt filter is on
+		if (!isset($instance['excerpt_filters']))
+			$instance[$alt_prefix.'excerpt_filters'] = 'on';
+	}
 	$instance = wp_parse_args( ( array ) $instance, array(
+	
+		// extension options
 		$alt_prefix.'excerpt_override_length'       => false,
 		$alt_prefix.'excerpt_override_more_text'    => false,
 		$alt_prefix.'hide_social_buttons'           => false,
 		$alt_prefix.'allow_html_excerpt'            => false,
 		$alt_prefix.'show_social_buttons_only_once' => false,
+
+		// widget options
+		$alt_prefix.'hide_post_titles'           => '',
+		$alt_prefix.'post_item_width'            => get_option('thumbnail_size_w',150) * (3/2),
+		$alt_prefix.'excerpt'                    => '',
+		$alt_prefix.'excerpt_length'             => 55,
+		$alt_prefix.'excerpt_more_text'          => '',
+		$alt_prefix.'excerpt_filters'            => false,
+		$alt_prefix.'comment_num'                => '',
+		$alt_prefix.'author'                     => '',
+		$alt_prefix.'date'                       => '',
+		$alt_prefix.'date_link'                  => '',
+		$alt_prefix.'date_format'                => '',
+		$alt_prefix.'align_post_title'           => 'left',
+		$alt_prefix.'align_post_details'         => 'left',
+		$alt_prefix.'thumbTop'                   => '',
+		$alt_prefix.'thumbPosition'		         => '',
+		$alt_prefix.'everything_is_link'         => false,
 	) );
+	
+	// extension options
 	$excerpt_override_length         = $instance[$alt_prefix.'excerpt_override_length'];
 	$excerpt_override_more_text      = $instance[$alt_prefix.'excerpt_override_more_text'];
 	$hide_social_buttons             = $instance[$alt_prefix.'hide_social_buttons'];
 	$allow_html_excerpt              = $instance[$alt_prefix.'allow_html_excerpt'];
 	$show_social_buttons_only_once   = $instance[$alt_prefix.'show_social_buttons_only_once'];
-?>
-<div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="display:<?php echo ((bool) $instance[$alt_prefix.'excerpt_filters']) ? 'block' : 'none'?>">
-	<p>
-		<label style="color:#61a000;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>">
-			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
-			<?php _e( 'Use widget excerpt length','category-posts' ); ?>
-		</label>
-	</p>
-	<p>
-		<label style="color:#61a000;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>">
-			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
-			<?php _e( 'Use widget excerpt \'more\' text','category-posts' ); ?>
-		</label>
-	</p>
-	<p>
-		<label style="color:#61a000;" for="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>">
-			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name("allow_html_excerpt"); ?>"<?php checked( (bool) $allow_html_excerpt, true ); ?> />
-				<?php _e( 'Allow HTML in the excerpt',TEXTDOMAIN ); ?>
-		</label>
-	</p>
-	<p>
- 		<label style="color:#61a000;" for="<?php echo $widget->get_field_id("hide_social_buttons"); ?>">
- 			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_social_buttons"); ?>" name="<?php echo $widget->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
- 				<?php _e( 'Hide social buttons',TEXTDOMAIN ); ?>
- 		</label>
- 	</p>
-	<p>
- 		<label style="color:#61a000;" for="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>">
- 			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>" name="<?php echo $widget->get_field_name("show_social_buttons_only_once"); ?>"<?php checked( (bool) $instance["show_social_buttons_only_once"], true ); ?> />
- 				<?php _e( 'Show social buttons only once',TEXTDOMAIN ); ?>
- 		</label>
- 	</p>
-</div>
-<?php	
+	
+	// widget options
+	$hide_post_titles                = $instance[$alt_prefix.'hide_post_titles'];
+	$post_item_width                 = $instance[$alt_prefix.'post_item_width'];
+	$excerpt                         = $instance[$alt_prefix.'excerpt'];
+	$excerpt_length                  = $instance[$alt_prefix.'excerpt_length'];
+	$excerpt_more_text               = $instance[$alt_prefix.'excerpt_more_text'];		
+	$excerpt_filters                 = $instance[$alt_prefix.'excerpt_filters'];	
+	$comment_num                     = $instance[$alt_prefix.'comment_num'];
+	$author                          = $instance[$alt_prefix.'author'];
+	$date                            = $instance[$alt_prefix.'date'];
+	$date_link                       = $instance[$alt_prefix.'date_link'];
+	$date_format                     = $instance[$alt_prefix.'date_format'];
+	$align_post_title                = $instance[$alt_prefix.'align_post_title'];
+	$align_post_details              = $instance[$alt_prefix.'align_post_details'];
+	$everything_is_link              = $instance[$alt_prefix.'everything_is_link'];
+	
+	// position is needed to know if to display the width
+	$thumbTop                 = $instance[$alt_prefix.'thumbTop'];
+	$thumbPosition            = $instance[$alt_prefix.'thumbPosition'];	
+	if (!$thumbPosition) {
+		if ($thumbTop)
+			$thumbPosition = 'top';
+		else
+			$thumbPosition        = 'left';
+	}
+	$thumb_top_use_post_item_width = isset($instance[$alt_prefix.'thumb_top_use_post_item_width']) ? $instance[$alt_prefix.'thumb_top_use_post_item_width'] : '';
+	
+	$style_column = (isset($instance['layout']) && $instance['layout'] == "column") ? true : false;
+
+	?>
+	<h4 <?php if($alt_prefix!=''&&(!isset($instance['alteration'])||$instance['alteration']=='none')) echo "style='display:none;'";
+		if($alt_prefix!='') echo "class='cat-button-secondary'";
+		?> data-panel="<?php echo $panel_id?>"><?php echo esc_html($panel_name)?>
+	</h4>
+	<div>
+		<p>
+			<label for="<?php echo $widget->get_field_id($alt_prefix."everything_is_link"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."everything_is_link"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."everything_is_link"); ?>"<?php checked( (bool) $everything_is_link, true ); ?> />
+				<?php _e( 'Everything is a link','categorypostspro' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $widget->get_field_id($alt_prefix."hide_post_titles"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."hide_post_titles"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."hide_post_titles"); ?>"<?php checked( (bool) $instance[$alt_prefix."hide_post_titles"], true ); ?> />
+				<?php _e( 'Hide post titles','categorypostspro' ); ?>
+			</label>
+		</p>
+		<p class="categorypostspro-post-details-panel-width" style="display:<?php echo !$thumb_top_use_post_item_width && (in_array($thumbPosition,array('cover','top','topdetails'))) || $style_column ? 'none' : 'block' ?>">
+			<label for="<?php echo $widget->get_field_id($alt_prefix."post_item_width"); ?>">
+				<?php _e('Text width:','categorypostspro')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $widget->get_field_id("post_item_width"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."post_item_width"); ?>" value="<?php echo $post_item_width; ?>" />
+				<?php _e('pixels','categorypostspro'); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $widget->get_field_id($alt_prefix."align_post_title"); ?>"><?php _e( 'Post titles align','categorypostspro' ); ?></label>
+			<select id="<?php echo $widget->get_field_id($alt_prefix."align_post_title"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."align_post_title"); ?>">
+				<option value="left" <?php selected( $align_post_title, 'left', true ); ?>><?php _e( 'Left','categorypostspro' ); ?></option>
+				<option value="right" <?php selected( $align_post_title, 'right', true ); ?>><?php _e( 'Right','categorypostspro' ); ?></option>
+				<option value="center" <?php selected( $align_post_title, 'center', true ); ?>><?php _e( 'Center','categorypostspro' ); ?></option>
+			</select>
+		</p>
+		<p>
+			<label for="<?php echo $widget->get_field_id($alt_prefix."align_post_details"); ?>"><?php _e( 'Details align','categorypostspro' ); ?></label>
+			<select id="<?php echo $widget->get_field_id($alt_prefix."align_post_details"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."align_post_details"); ?>">
+				<option value="left" <?php selected( $align_post_details, 'left', true ); ?>><?php _e( 'Left','categorypostspro' ); ?></option>
+				<option value="right" <?php selected( $align_post_details, 'right', true ); ?>><?php _e( 'Right','categorypostspro' ); ?></option>
+				<option value="center" <?php selected( $align_post_details, 'center', true ); ?>><?php _e( 'Center','categorypostspro' ); ?></option>
+				<option value="justify" <?php selected( $align_post_details, 'justify', true ); ?>><?php _e( 'Justify','categorypostspro' ); ?></option>
+			</select>
+		</p>
+		<p>
+			<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt"); ?>" onchange="javascript:cpwp_namespace.togglePostDetailsExcerptPanel(this)">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt"); ?>"<?php checked( (bool) $instance[$alt_prefix."excerpt"], true ); ?> />
+				<?php _e( 'Show post excerpt','categorypostspro' ); ?>
+			</label>
+		</p>
+		<div class="cpwp_ident categorypostspro-post-details-panel-excerpt" style="display:<?php echo ($excerpt == 'on') ? 'block' : 'none'?>">
+			<p>
+				<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt_length"); ?>">
+					<?php _e( 'Excerpt length (in words):','categorypostspro' ); ?>
+				</label>
+				<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_length"); ?>" value="<?php echo $instance[$alt_prefix."excerpt_length"]; ?>" />
+			</p>
+			<p>
+				<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt_more_text"); ?>">
+					<?php _e( 'Excerpt \'more\' text:','categorypostspro' ); ?>
+				</label>
+				<input class="widefat" style="width:45%;" placeholder="<?php _e('... more','categorypostspro')?>" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_more_text"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_more_text"); ?>" type="text" value="<?php echo $instance[$alt_prefix."excerpt_more_text"]; ?>" />
+			</p>
+			<p>
+				<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt_filters"); ?>" onchange="javascript:cpwp_namespace.togglePostDetailsExcerptFilterPanel(this)">
+					<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_filters"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
+					<?php _e( 'Don\'t override Themes and plugin filters','categorypostspro' ); ?>
+				</label>
+			</p>
+			<div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="display:<?php echo ((bool) $instance[$alt_prefix.'excerpt_filters']) ? 'block' : 'none'?>">
+				<p>
+					<label style="color:#61a000;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>">
+						<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
+						<?php _e( 'Use widget excerpt length','category-posts' ); ?>
+					</label>
+				</p>
+				<p>
+					<label style="color:#61a000;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>">
+						<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
+						<?php _e( 'Use widget excerpt \'more\' text','category-posts' ); ?>
+					</label>
+				</p>
+				<p>
+					<label style="color:#61a000;" for="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>">
+						<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name("allow_html_excerpt"); ?>"<?php checked( (bool) $allow_html_excerpt, true ); ?> />
+							<?php _e( 'Allow HTML in the excerpt',TEXTDOMAIN ); ?>
+					</label>
+				</p>
+				<p>
+					<label style="color:#61a000;" for="<?php echo $widget->get_field_id("hide_social_buttons"); ?>">
+						<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_social_buttons"); ?>" name="<?php echo $widget->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
+							<?php _e( 'Hide social buttons',TEXTDOMAIN ); ?>
+					</label>
+				</p>
+				<p>
+					<label style="color:#61a000;" for="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>">
+						<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>" name="<?php echo $widget->get_field_name("show_social_buttons_only_once"); ?>"<?php checked( (bool) $instance["show_social_buttons_only_once"], true ); ?> />
+							<?php _e( 'Show social buttons only once',TEXTDOMAIN ); ?>
+					</label>
+				</p>
+			</div>
+		</div>
+		<p>
+			<label for="<?php echo $widget->get_field_id($alt_prefix."date"); ?>" onchange="javascript:cpwp_namespace.togglePostDetailsDatePanel(this)">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."date"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."date"); ?>"<?php checked( (bool) $instance[$alt_prefix."date"], true ); ?> />
+				<?php _e( 'Show post date','categorypostspro' ); ?>
+			</label>
+		</p>
+		<div class="cpwp_ident categorypostspro-post-details-panel-date" style="display:<?php echo ($date == 'on') ? 'block' : 'none'?>">
+			<p>
+				<label for="<?php echo $widget->get_field_id($alt_prefix."date_format"); ?>">
+					<?php _e( 'Date format:','categorypostspro' ); ?>
+				</label>
+				<input class="text" placeholder="j M Y" id="<?php echo $widget->get_field_id($alt_prefix."date_format"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."date_format"); ?>" type="text" value="<?php echo esc_attr($instance[$alt_prefix."date_format"]); ?>" size="8" />
+			</p>
+			<p>
+				<label for="<?php echo $widget->get_field_id($alt_prefix."date_link"); ?>">
+					<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."date_link"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."date_link"); ?>"<?php checked( (bool) $instance[$alt_prefix."date_link"], true ); ?> />
+					<?php _e( 'Make widget date link','categorypostspro' ); ?>
+				</label>
+			</p>
+		</div>
+		<p>
+			<label for="<?php echo $widget->get_field_id($alt_prefix."comment_num"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."comment_num"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."comment_num"); ?>"<?php checked( (bool) $instance[$alt_prefix."comment_num"], true ); ?> />
+				<?php _e( 'Show number of comments','categorypostspro' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $widget->get_field_id($alt_prefix."author"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."author"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."author"); ?>"<?php checked( (bool) $instance[$alt_prefix."author"], true ); ?> />
+				<?php _e( 'Show post author','categorypostspro' ); ?>
+		</p>
+	</div>
+	<?php
+
+	return true;
 }
 
-add_action('cpwp_details_panel_bottom_excerpt',__NAMESPACE__.'\cpwp_details_panel_bottom_excerpt',10,3);
+add_filter('cpwp_details_panel',__NAMESPACE__.'\form_details_panel_filter',10,5);
 
 /**
  * Filter for the shortcode settings
