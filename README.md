@@ -17,9 +17,9 @@ The Excerpt Extension adds more options for the excerpt output.
 
 ### Try before buy
 
-With the next Term and Category Based Posts Widget version 4.7 we will let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host ip of 127.0.0.1).
+With Term and Category Based Posts Widget version 4.7 or higher we let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host IP address of 127.0.0.1).
 
-A beta-4.7 can be downloaded here: [Welcome take 4.7-beta2 spin](http://tiptoppress.com/welcome-take-4-7-beta2-spin/?utm_source=github&utm_campaign=try_befor_buy_eext&utm_medium=web) and the stable version is released within the next days.
+Download the Term and Category Based Posts Widget for a free trail from here: [tiptoppress.com/free-trail-localhost](http://tiptoppress.com/free-trail-localhost/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web).
 
 ### Features
 * Option to allow HTML in the excerpt
