@@ -17,6 +17,46 @@ const TEXTDOMAIN = 'excerpt-extension';
 
 
 /**
+ * Excerpt length in characters
+ *
+ * @param excerpt text
+ * @return excerpt with the set length in characters
+ *
+ */
+function excerpt_length_in_chars_filter($text) {
+
+	global $settings;		
+	$excerpt = $text;
+	
+	if (isset($settings["excerpt_length_in_chars"]) && $settings["excerpt_length_in_chars"]) {
+		// length
+		if (isset($settings['excerpt_length']) && ($settings['excerpt_length'] > 0))
+			$length = (int) $settings['excerpt_length'];
+		else 
+			$length = 55; // use default
+	
+		if($source == "content" ? ($excerpt = get_the_content()) : ($excerpt = get_the_excerpt()));
+		$excerpt = preg_replace(" (\[.*?\])",'',$excerpt);
+		$excerpt = strip_shortcodes($excerpt);
+		$excerpt = strip_tags($excerpt);
+		$excerpt = substr($excerpt, 0, $length);
+		$excerpt = substr($excerpt, 0, strripos($excerpt, " "));
+		$excerpt = trim(preg_replace( '/\s+/', ' ', $excerpt));
+		
+		// more text
+		if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '')
+			$excerpt .= ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
+		else if($filterName = key($wp_filter['excerpt_more'][10]))
+			$excerpt .= " " . $wp_filter['excerpt_more'][10][$filterName]['function'](0);
+		else
+			$excerpt .= ' [...]';
+	}
+	return $excerpt;
+}
+
+add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\excerpt_length_in_chars_filter');
+
+/**
  * Excerpt disable/show social buttons, banner, etc.
  *
  * @param excerpt text
@@ -25,9 +65,9 @@ const TEXTDOMAIN = 'excerpt-extension';
  */
 function apply_the_excerpt_social_buttons($text) {
 
-	global $settings;	
-		
+	global $settings;		
 	$ret = "";
+	
 	if (isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"])
 	{
 		// length
@@ -64,34 +104,37 @@ function apply_the_excerpt_social_buttons($text) {
  *
  */
 function allow_html_excerpt($text) {
-
 	global $settings, $extension, $wp_filter;
 
 	$allowed_elements = '<script>,<style>,<br>,<em>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<video>,<audio>';
+	
+	// length
 	$new_excerpt_length = ( isset($settings["excerpt_length"]) && $settings["excerpt_length"] > 0 ) ? $settings["excerpt_length"] : 55;
-	// if ( '' == $text ) {
-		$text = get_the_content('');
-		$text = strip_shortcodes( $text );
-		$text = apply_filters('the_content', $text);
-		$text = str_replace('\]\]\>', ']]&gt;', $text);
-		$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);		
-		$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
-		$excerpt_length = $new_excerpt_length;		
-		if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '') {
-			$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
-		}else if($filterName = key($wp_filter['excerpt_more'][10])) {
-			$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
-		}else {
-			$excerpt_more = '[...]';
-		}
-		
-		$words = explode(' ', $text, $excerpt_length + 1);
-		if (count($words)> $excerpt_length) {
-			array_pop($words);
-			array_push($words, $excerpt_more);
-			$text = implode(' ', $words);
-		}
-	// }
+
+	$text = get_the_content('');
+	$text = strip_shortcodes( $text );
+	$text = apply_filters('the_content', $text);
+	$text = str_replace('\]\]\>', ']]&gt;', $text);
+	$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);		
+	$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
+	$excerpt_length = $new_excerpt_length;	
+
+	// more text
+	if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '') {
+		$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
+	}else if($filterName = key($wp_filter['excerpt_more'][10])) {
+		$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
+	}else {
+		$excerpt_more = '[...]';
+	}
+	
+	$words = explode(' ', $text, $excerpt_length + 1);
+	if (count($words)> $excerpt_length) {
+		array_pop($words);
+		array_push($words, $excerpt_more);
+		$text = implode(' ', $words);
+	}
+
 	return '<p>' . $text . '</p>';
 }
 
@@ -200,6 +243,7 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 		$alt_prefix.'thumbTop'                   => '',
 		$alt_prefix.'thumbPosition'		         => '',
 		$alt_prefix.'everything_is_link'         => false,
+		$alt_prefix.'excerpt_length_in_chars'    => false,
 	) );
 	
 	// extension options
@@ -208,6 +252,7 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 	$hide_social_buttons             = $instance[$alt_prefix.'hide_social_buttons'];
 	$allow_html_excerpt              = $instance[$alt_prefix.'allow_html_excerpt'];
 	$show_social_buttons_only_once   = $instance[$alt_prefix.'show_social_buttons_only_once'];
+	$excerpt_length_in_chars         = $instance[$alt_prefix.'excerpt_length_in_chars'];
 	
 	// widget options
 	$hide_post_titles                = $instance[$alt_prefix.'hide_post_titles'];
@@ -285,13 +330,23 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 				<?php _e( 'Show post excerpt','categorypostspro' ); ?>
 			</label>
 		</p>
-		<div class="cpwp_ident categorypostspro-post-details-panel-excerpt" style="display:<?php echo ($excerpt == 'on') ? 'block' : 'none'?>">
+		<div class="cpwp_ident categorypostspro-post-details-panel-excerpt" style="display:<?php echo ($excerpt) ? 'block' : 'none'?>">
 			<p>
 				<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt_length"); ?>">
-					<?php _e( 'Excerpt length (in words):','categorypostspro' ); ?>
+					<?php _e( 'Excerpt length (in words):','categorypostspro' ); ?>					
 				</label>
 				<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_length"); ?>" value="<?php echo $instance[$alt_prefix."excerpt_length"]; ?>" />
 			</p>
+			
+<!--START MODIF Excerpt Extension-->
+			<p>
+				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_length_in_chars"); ?>">
+					<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_length_in_chars"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_length_in_chars"); ?>"<?php checked( !empty($excerpt_length_in_chars), true ); ?> />
+					<?php _e( 'Set the excerpt lenght in characters','categorypostspro' ); ?>
+				</label>
+			</p>
+<!--//END MODIF Excerpt Extension-->
+			
 			<p>
 				<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt_more_text"); ?>">
 					<?php _e( 'Excerpt \'more\' text:','categorypostspro' ); ?>
@@ -302,46 +357,48 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 				<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt_filters"); ?>" onchange="javascript:cpwp_namespace.togglePostDetailsExcerptFilterPanel(this)">
 					<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_filters"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
 					<?php _e( 'Don\'t override Themes and plugin filters','categorypostspro' ); ?>
-					<span style="color:#07d;"><?php _e( '(Check to use the additional Excerpt Extension options.)' ); ?></span> <!--MODIF Excerpt Extension-->
+					
+<!--START MODIF Excerpt Extension-->
+					<span style="color:#07d;"><?php _e( '(Check to use the additional Excerpt Extension options.)','categorypostspro' ); ?></span>
+<!--//END MODIF Excerpt Extension-->
+					
 				</label>
 			</p>
 			
-			<!--START Extension HTML-->
-			
+<!--START MODIF Excerpt Extension-->
 			<div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="border-left-color: #44809e;display:<?php echo ((bool) $instance[$alt_prefix.'excerpt_filters']) ? 'block' : 'none'?>">
 				<p>
 					<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>">
 						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
-						<?php _e( 'Use widget excerpt length','category-posts' ); ?>
+						<?php _e( 'Use widget excerpt length','categorypostspro' ); ?>
 					</label>
 				</p>
 				<p>
 					<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>">
 						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
-						<?php _e( 'Use widget excerpt \'more\' text','category-posts' ); ?>
+						<?php _e( 'Use widget excerpt \'more\' text','categorypostspro' ); ?>
 					</label>
 				</p>
 				<p>
 					<label style="color:#07d;" for="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>">
 						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name("allow_html_excerpt"); ?>"<?php checked( (bool) $allow_html_excerpt, true ); ?> />
-							<?php _e( 'Allow HTML in the excerpt',TEXTDOMAIN ); ?>
+							<?php _e( 'Allow HTML in the excerpt','categorypostspro' ); ?>
 					</label>
 				</p>
 				<p>
 					<label style="color:#07d;" for="<?php echo $widget->get_field_id("hide_social_buttons"); ?>">
 						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_social_buttons"); ?>" name="<?php echo $widget->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
-							<?php _e( 'Hide social buttons',TEXTDOMAIN ); ?>
+							<?php _e( 'Hide social buttons','categorypostspro' ); ?>
 					</label>
 				</p>
 				<p>
 					<label style="color:#07d;" for="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>">
 						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>" name="<?php echo $widget->get_field_name("show_social_buttons_only_once"); ?>"<?php checked( (bool) $instance["show_social_buttons_only_once"], true ); ?> />
-							<?php _e( 'Show social buttons only once',TEXTDOMAIN ); ?>
+							<?php _e( 'Show social buttons only once','categorypostspro' ); ?>
 					</label>
 				</p>
 			</div>
-			
-			<!--END Extension HTML-->
+<!--//END MODIF Excerpt Extension-->
 			
 		</div>
 		<p>
