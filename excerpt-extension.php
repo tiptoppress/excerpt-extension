@@ -398,13 +398,13 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 				<p>
 					<label style="color:#07d;" for="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>">
 						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name("allow_html_excerpt"); ?>"<?php checked( (bool) $allow_html_excerpt, true ); ?> />
-							<?php _e( 'Allow HTML in the excerpt','categorypostspro' ); ?>
+							<?php _e( 'Allow HTML and Shortcode','categorypostspro' ); ?>
 					</label>
 				</p>
 				<p>
 					<label style="color:#07d;" for="<?php echo $widget->get_field_id("hide_shortcode"); ?>">
 						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_shortcode"); ?>" name="<?php echo $widget->get_field_name("hide_shortcode"); ?>"<?php checked( (bool) $hide_shortcode, true ); ?> />
-							<?php _e( 'Hide Shortcode in the excerpt','categorypostspro' ); ?>
+							<?php _e( 'Hide the Shortcode','categorypostspro' ); ?>
 					</label>
 				</p>
 				<p>
