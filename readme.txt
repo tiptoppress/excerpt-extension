@@ -3,7 +3,7 @@ Contributors: kometschuh
 Tags: content, formatting, post, post-excerpt, excerpt
 Requires at least: 2.8
 Tested up to: 4.7
-Stable tag: 0.1
+Stable tag: 4.7
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,7 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 * Option to allow HTML in the excerpt
 * Option to override Theme and plugin excerpt lenght filters
 * Option to override Theme and plugin excerpt more filters
+* Option to hide shortcode
 * Option to hide social buttons, banners, shortcodes and more used in the excerpt
 * Option to show social buttons, banners, shortcodes and more only once in the outputed excerpt
 
@@ -63,6 +64,9 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 3. Solves the double rendered shortcode bug in the excerpt.
 
 == Changelog ==
+
+= 4.7 - September 10th 2017 =
+* Add a option to hide shortcode
 
 = 0.1 - December 17th 2016 =
 * Add a option to allow HTML in the excerpt

@@ -4,7 +4,7 @@ Plugin Name: Excerpt Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: Adds more excerpt options to the details pannel in the widgets admin from the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
-Version: 0.1
+Version: 4.7
 Author URI: http://tiptoppress.com
 */
 
@@ -23,11 +23,11 @@ const TEXTDOMAIN = 'excerpt-extension';
  * @return excerpt with social buttons, banner, etc. or not
  *
  */
-function apply_the_excerpt_social_buttons($text) {
+function apply_the_excerpt_social_buttons_filter($text) {
 
-	global $settings;	
-		
+	global $settings;		
 	$ret = "";
+	
 	if (isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"])
 	{
 		// length
@@ -63,35 +63,46 @@ function apply_the_excerpt_social_buttons($text) {
  * @return excerpt with allowed html
  *
  */
-function allow_html_excerpt($text) {
-
+function allow_html_filter($text) {
 	global $settings, $extension, $wp_filter;
 
-	$allowed_elements = '<script>,<style>,<br>,<em>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<video>,<audio>';
+	$allowed_elements = '<script>,<style>,<video>,<audio>,<br>,<em>,<strong>,<i>,<ul>,<ol>,<li>,<a>,<p>,<span>,<img><h1>,<h2>,<h3>,<h4>,<h5>,<h6>';
 	$new_excerpt_length = ( isset($settings["excerpt_length"]) && $settings["excerpt_length"] > 0 ) ? $settings["excerpt_length"] : 55;
-	// if ( '' == $text ) {
-		$text = get_the_content('');
+
+	$text = get_the_content('');
+	if (isset($settings['hide_shortcode']) && ($settings['hide_shortcode']))
+	{
 		$text = strip_shortcodes( $text );
-		$text = apply_filters('the_content', $text);
-		$text = str_replace('\]\]\>', ']]&gt;', $text);
-		$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);		
-		$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
-		$excerpt_length = $new_excerpt_length;		
-		if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '') {
-			$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
-		}else if($filterName = key($wp_filter['excerpt_more'][10])) {
-			$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
-		}else {
-			$excerpt_more = '[...]';
-		}
-		
-		$words = explode(' ', $text, $excerpt_length + 1);
-		if (count($words)> $excerpt_length) {
-			array_pop($words);
-			array_push($words, $excerpt_more);
-			$text = implode(' ', $words);
-		}
-	// }
+	}
+	else
+	{
+		$text = do_shortcode( $text );
+	}
+	$text = apply_filters('the_content', $text);
+	$text = str_replace('\]\]\>', ']]&gt;', $text);
+	$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);		
+	$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
+	$excerpt_length = $new_excerpt_length;		
+	if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '')
+	{
+		$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
+	}
+	else if($filterName = key($wp_filter['excerpt_more'][10]))
+	{
+		$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
+	}
+	else
+	{
+		$excerpt_more = '[...]';
+	}
+	
+	$words = explode(' ', $text, $excerpt_length + 1);
+	if (count($words)> $excerpt_length) {
+		array_pop($words);
+		array_push($words, $excerpt_more);
+		$text = implode(' ', $words);
+	}
+
 	return '<p>' . $text . '</p>';
 }
 
@@ -125,12 +136,12 @@ function cpwp_before_itemHTML($widget,$instance) {
 		add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 9999);
 	}
 	
-	add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons');
+	add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons_filter');
 
 	if(isset($instance['allow_html_excerpt']) && ($instance['allow_html_excerpt']))
 	{
 		remove_filter('get_the_excerpt', 'wp_trim_excerpt');
-		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\allow_html_excerpt');
+		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\allow_html_filter');
 	}
 }
 
@@ -152,7 +163,6 @@ function cpwp_after_itemHTML($widget,$instance) {
 	remove_filter('excerpt_more', array($widget,'excerpt_more_filter'));
 	add_filter('get_the_excerpt', 'wp_trim_excerpt');
 	remove_filter('the_excerpt', array($widget,'apply_the_excerpt'));
-
 }
 
 add_action('cpwp_after_itemHTML',__NAMESPACE__.'\cpwp_after_itemHTML',10,2);
@@ -166,17 +176,30 @@ add_action('cpwp_after_itemHTML',__NAMESPACE__.'\cpwp_after_itemHTML',10,2);
  *
  */
 function cpwp_details_panel_bottom_excerpt($widget,$instance,$alt_prefix) {
+	if (count($instance) == 0)
+	{ // new widget, use defaults
+		$instance = default_settings();
+	}
+	else
+	{ // updated widgets: hide shortcode is on
+		if (!isset($instance[$alt_prefix.'hide_shortcode']))
+			$instance[$alt_prefix.'hide_shortcode'] = 'on';
+	}
 	
 	$instance = wp_parse_args( ( array ) $instance, array(
+	
+		// extension options
 		$alt_prefix.'excerpt_override_length'       => false,
 		$alt_prefix.'excerpt_override_more_text'    => false,
 		$alt_prefix.'hide_social_buttons'           => false,
+		$alt_prefix.'hide_shortcode'                => false,
 		$alt_prefix.'allow_html_excerpt'            => false,
 		$alt_prefix.'show_social_buttons_only_once' => false,
 	) );
 	$excerpt_override_length         = $instance[$alt_prefix.'excerpt_override_length'];
 	$excerpt_override_more_text      = $instance[$alt_prefix.'excerpt_override_more_text'];
 	$hide_social_buttons             = $instance[$alt_prefix.'hide_social_buttons'];
+	$hide_shortcode                  = $instance[$alt_prefix.'hide_shortcode'];
 	$allow_html_excerpt              = $instance[$alt_prefix.'allow_html_excerpt'];
 	$show_social_buttons_only_once   = $instance[$alt_prefix.'show_social_buttons_only_once'];
 ?>
@@ -229,11 +252,13 @@ function cpwp_default_settings($setting) {
 		'excerpt_override_length'           => false,
 		'excerpt_override_more_text'        => false,
 		'hide_social_buttons'               => false,
+		'hide_shortcode'                    => false,
 		'allow_html_excerpt'                => false,
 		'show_social_buttons_only_once'     => false,
 		'alt_excerpt_override_length'       => false,
 		'alt_excerpt_override_more_text'    => false,
 		'alt_hide_social_buttons'           => false,
+		'alt_hide_shortcode'                => false,
 		'alt_allow_html_excerpt'            => false,
 		'alt_show_social_buttons_only_once' => false,
 	) );
@@ -248,7 +273,6 @@ add_filter('cpwp_default_settings',__NAMESPACE__.'\cpwp_default_settings');
  *  
  *  @return array of the widget links
  *  
- *  @since 0.1
  */
 function add_action_links ( $links ) {
     $pro_link = array(
