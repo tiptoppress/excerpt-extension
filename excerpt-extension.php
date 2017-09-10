@@ -15,6 +15,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 const TEXTDOMAIN = 'excerpt-extension';
 
+
 /**
  * Excerpt disable/show social buttons, banner, etc.
  *
@@ -105,28 +106,33 @@ add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\excerpt_length
 function allow_html_filter($text) {
 	global $settings, $extension, $wp_filter;
 
-	$allowed_elements = '<script>,<style>,<span>,<br>,<em>,<strong>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<h3>,<div>,<video>,<audio>';
-	
-	// length
+	$allowed_elements = '<script>,<style>,<video>,<audio>,<br>,<em>,<strong>,<i>,<ul>,<ol>,<li>,<a>,<p>,<span>,<img><h1>,<h2>,<h3>,<h4>,<h5>,<h6>';
 	$new_excerpt_length = ( isset($settings["excerpt_length"]) && $settings["excerpt_length"] > 0 ) ? $settings["excerpt_length"] : 55;
 
-	$text = get_the_content('');	
-	$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
+	$text = get_the_content('');
 	if (isset($settings['hide_shortcode']) && ($settings['hide_shortcode']))
+	{
 		$text = strip_shortcodes( $text );
-	else	
+	}
+	else
+	{
 		$text = do_shortcode( $text );
+	}
 	$text = apply_filters('the_content', $text);
 	$text = str_replace('\]\]\>', ']]&gt;', $text);
 	$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);		
-	$excerpt_length = $new_excerpt_length;	
-
-	// more text
-	if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '') {
+	$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
+	$excerpt_length = $new_excerpt_length;		
+	if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '')
+	{
 		$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
-	}else if($filterName = key($wp_filter['excerpt_more'][10])) {
+	}
+	else if($filterName = key($wp_filter['excerpt_more'][10]))
+	{
 		$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
-	}else {
+	}
+	else
+	{
 		$excerpt_more = '[...]';
 	}
 	
@@ -172,7 +178,7 @@ function cpwp_before_itemHTML($widget,$instance) {
 	
 	add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons_filter');
 
-	if(isset($instance['allow_html']) && ($instance['allow_html']))
+	if(isset($instance['allow_html_excerpt']) && ($instance['allow_html_excerpt']))
 	{
 		remove_filter('get_the_excerpt', 'wp_trim_excerpt');
 		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\allow_html_filter');
@@ -213,14 +219,18 @@ add_action('cpwp_after_itemHTML',__NAMESPACE__.'\cpwp_after_itemHTML',10,2);
  *
  */
 function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_prefix) {
-	if (count($instance) == 0) { // new widget, use defaults
+	if (count($instance) == 0)
+	{ // new widget, use defaults
 		$instance = default_settings();
-	} else { // updated widgets: excerpt filter and hide shortcode is on
+	}
+	else
+	{ // updated widgets: excerpt filter and hide shortcode is on
 		if (!isset($instance[$alt_prefix.'excerpt_filters']))
 			$instance[$alt_prefix.'excerpt_filters'] = 'on';
 		if (!isset($instance[$alt_prefix.'hide_shortcode']))
 			$instance[$alt_prefix.'hide_shortcode'] = 'on';
 	}
+	
 	$instance = wp_parse_args( ( array ) $instance, array(
 	
 		// extension options
@@ -228,7 +238,7 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 		$alt_prefix.'excerpt_override_more_text'    => false,
 		$alt_prefix.'hide_social_buttons'           => false,
 		$alt_prefix.'hide_shortcode'                => false,
-		$alt_prefix.'allow_html'                    => false,
+		$alt_prefix.'allow_html_excerpt'            => false,
 		$alt_prefix.'show_social_buttons_only_once' => false,
 
 		// widget options
@@ -256,7 +266,7 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 	$excerpt_override_more_text      = $instance[$alt_prefix.'excerpt_override_more_text'];
 	$hide_social_buttons             = $instance[$alt_prefix.'hide_social_buttons'];
 	$hide_shortcode                  = $instance[$alt_prefix.'hide_shortcode'];
-	$allow_html                      = $instance[$alt_prefix.'allow_html'];
+	$allow_html_excerpt              = $instance[$alt_prefix.'allow_html_excerpt'];
 	$show_social_buttons_only_once   = $instance[$alt_prefix.'show_social_buttons_only_once'];
 	$excerpt_length_in_chars         = $instance[$alt_prefix.'excerpt_length_in_chars'];
 	
@@ -386,8 +396,8 @@ function form_details_panel_filter($widget,$instance,$panel_id,$panel_name,$alt_
 					</label>
 				</p>
 				<p>
-					<label style="color:#07d;" for="<?php echo $widget->get_field_id("allow_html"); ?>">
-						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html"); ?>" name="<?php echo $widget->get_field_name("allow_html"); ?>"<?php checked( (bool) $allow_html, true ); ?> />
+					<label style="color:#07d;" for="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>">
+						<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name("allow_html_excerpt"); ?>"<?php checked( (bool) $allow_html_excerpt, true ); ?> />
 							<?php _e( 'Allow HTML in the excerpt','categorypostspro' ); ?>
 					</label>
 				</p>
@@ -466,13 +476,13 @@ function cpwp_default_settings($setting) {
 		'excerpt_override_more_text'        => false,
 		'hide_social_buttons'               => false,
 		'hide_shortcode'                    => false,
-		'allow_html'                        => false,
+		'allow_html_excerpt'                => false,
 		'show_social_buttons_only_once'     => false,
 		'alt_excerpt_override_length'       => false,
 		'alt_excerpt_override_more_text'    => false,
 		'alt_hide_social_buttons'           => false,
 		'alt_hide_shortcode'                => false,
-		'alt_allow_html'                    => false,
+		'alt_allow_html_excerpt'            => false,
 		'alt_show_social_buttons_only_once' => false,
 	) );
 }

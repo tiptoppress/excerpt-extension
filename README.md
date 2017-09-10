@@ -25,6 +25,8 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 * Option to allow HTML in the excerpt
 * Option to override Theme and plugin excerpt lenght filters
 * Option to override Theme and plugin excerpt more filters
+* Option excerpt length in characters
+* Option to hide shortcode
 * Option to hide social buttons, banners, shortcodes and more used in the excerpt
 * Option to show social buttons, banners, shortcodes and more only once in the outputed excerpt
 
@@ -54,6 +56,12 @@ While using this plugin if you find any bug or any conflict, please submit an is
 5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
 
 ## Changelog
+#### 4.8 - September 10th 2017 =
+* Add a option excerpt length in characters
+
+#### 4.7 - September 10th 2017 =
+* Add a option to hide shortcode
+
 #### 0.1 - December 17th 2016
 * Add a option to allow HTML in the excerpt
 * Add a option to override Theme and plugin excerpt lenght filters
