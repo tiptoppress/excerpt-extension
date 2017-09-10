@@ -203,34 +203,41 @@ function cpwp_details_panel_bottom_excerpt($widget,$instance,$alt_prefix) {
 	$allow_html_excerpt              = $instance[$alt_prefix.'allow_html_excerpt'];
 	$show_social_buttons_only_once   = $instance[$alt_prefix.'show_social_buttons_only_once'];
 ?>
+<span style="color:#07d;"><?php _e( '(Check to use the additional Excerpt Extension options.)','category-posts' ); ?></span>
 <div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="display:<?php echo ((bool) $instance[$alt_prefix.'excerpt_filters']) ? 'block' : 'none'?>">
 	<p>
-		<label style="color:#61a000;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>">
-			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
+		<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>">
+			<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
 			<?php _e( 'Use widget excerpt length','category-posts' ); ?>
 		</label>
 	</p>
 	<p>
-		<label style="color:#61a000;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>">
-			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
+		<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>">
+			<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
 			<?php _e( 'Use widget excerpt \'more\' text','category-posts' ); ?>
 		</label>
 	</p>
 	<p>
-		<label style="color:#61a000;" for="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>">
-			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name("allow_html_excerpt"); ?>"<?php checked( (bool) $allow_html_excerpt, true ); ?> />
-				<?php _e( 'Allow HTML in the excerpt',TEXTDOMAIN ); ?>
+		<label style="color:#07d;" for="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>">
+			<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name("allow_html_excerpt"); ?>"<?php checked( (bool) $allow_html_excerpt, true ); ?> />
+				<?php _e( 'Allow HTML and Shortcode',TEXTDOMAIN ); ?>
 		</label>
 	</p>
 	<p>
- 		<label style="color:#61a000;" for="<?php echo $widget->get_field_id("hide_social_buttons"); ?>">
- 			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_social_buttons"); ?>" name="<?php echo $widget->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
+		<label style="color:#07d;" for="<?php echo $widget->get_field_id("hide_shortcode"); ?>">
+			<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_shortcode"); ?>" name="<?php echo $widget->get_field_name("hide_shortcode"); ?>"<?php checked( (bool) $hide_shortcode, true ); ?> />
+				<?php _e( 'Hide the Shortcode','category-posts' ); ?>
+		</label>
+	</p>
+	<p>
+ 		<label style="color:#07d;" for="<?php echo $widget->get_field_id("hide_social_buttons"); ?>">
+ 			<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("hide_social_buttons"); ?>" name="<?php echo $widget->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
  				<?php _e( 'Hide social buttons',TEXTDOMAIN ); ?>
  		</label>
  	</p>
 	<p>
- 		<label style="color:#61a000;" for="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>">
- 			<input style="border-color:#61a000;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>" name="<?php echo $widget->get_field_name("show_social_buttons_only_once"); ?>"<?php checked( (bool) $instance["show_social_buttons_only_once"], true ); ?> />
+ 		<label style="color:#07d;" for="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>">
+ 			<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("show_social_buttons_only_once"); ?>" name="<?php echo $widget->get_field_name("show_social_buttons_only_once"); ?>"<?php checked( (bool) $instance["show_social_buttons_only_once"], true ); ?> />
  				<?php _e( 'Show social buttons only once',TEXTDOMAIN ); ?>
  		</label>
  	</p>
