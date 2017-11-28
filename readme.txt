@@ -68,6 +68,8 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 
 = 4.8 - September 10th 2017 =
 * Add a option excerpt length in characters
+= 4.7.1 - November 28 2017 =
+* Bugfix If Theme excerpt_more is not set
 
 = 4.7 - September 10th 2017 =
 * Add a option to hide shortcode

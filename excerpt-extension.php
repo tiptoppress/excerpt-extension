@@ -127,7 +127,7 @@ function allow_html_filter($text) {
 	{
 		$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
 	}
-	else if($filterName = key($wp_filter['excerpt_more'][10]))
+	else if(isset($wp_filter['excerpt_more'][10]) && $wp_filter['excerpt_more'][10] && $filterName = key($wp_filter['excerpt_more'][10]))
 	{
 		$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
 	}
