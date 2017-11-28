@@ -4,7 +4,7 @@ Plugin Name: Excerpt Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: Adds more excerpt options to the details pannel in the widgets admin from the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
-Version: 4.7
+Version: 4.7.1
 Author URI: http://tiptoppress.com
 */
 
@@ -87,7 +87,7 @@ function allow_html_filter($text) {
 	{
 		$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
 	}
-	else if($filterName = key($wp_filter['excerpt_more'][10]))
+	else if(isset($wp_filter['excerpt_more'][10]) && $wp_filter['excerpt_more'][10] && $filterName = key($wp_filter['excerpt_more'][10]))
 	{
 		$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
 	}
