@@ -14,7 +14,7 @@ A free extension for the premium widget Term and Category Based Posts Widget
 The Excerpt Extension adds more options for the excerpt output. 
 
 <blockquote>
-<p>This plugin is an add-on for the Term and Category Based Posts Widget and available here <a target="_blank" herf="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.</p>
+<p>This plugin is an add-on for the Term and Category Based Posts Widget and available here <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.</p>
 </blockquote>
 
 = Features =
