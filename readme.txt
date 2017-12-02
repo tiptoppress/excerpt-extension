@@ -11,13 +11,11 @@ A free extension for the premium widget Term and Category Based Posts Widget
 
 == Description ==
 
-The Excerpt Extension adds more options for the excerpt output. Term and Category Based Posts Widget is available here [tiptoppress.com](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web).
+The Excerpt Extension adds more options for the excerpt output. 
 
-= Try before buy =
-
-With Term and Category Based Posts Widget version 4.7 or higher we let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host IP address of 127.0.0.1).
-
-Download the Term and Category Based Posts Widget for a free trail from here: [tiptoppress.com/free-trail-localhost](http://tiptoppress.com/free-trail-localhost/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web).
+<blockquote>
+<p>This plugin is an add-on for the Term and Category Based Posts Widget and available here <a target="_blank" herf="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.</p>
+</blockquote>
 
 = Features =
 
@@ -28,6 +26,12 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 * Option to hide shortcode
 * Option to hide social buttons, banners, shortcodes and more used in the excerpt
 * Option to show social buttons, banners, shortcodes and more only once in the outputed excerpt
+
+<blockquote>
+<h4>Try before buy</h4>
+<p>With Term and Category Based Posts Widget version 4.7 or higher we let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host IP address of 127.0.0.1).</p>
+<p>Download the Term and Category Based Posts Widget for a free trail from here: <a target="_blank" href="http://tiptoppress.com/free-trail-localhost/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web">tiptoppress.com/free-trail-localhost</a>.</p>
+</blockquote>
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at 

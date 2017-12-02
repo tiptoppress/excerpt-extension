@@ -15,11 +15,7 @@ A free extension for the premium widget Term and Category Based Posts Widget ava
 ## Description
 The Excerpt Extension adds more options for the excerpt output.
 
-### Try before buy
-
-With Term and Category Based Posts Widget version 4.7 or higher we let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host IP address of 127.0.0.1).
-
-Download the Term and Category Based Posts Widget for a free trail from here: [tiptoppress.com/free-trail-localhost](http://tiptoppress.com/free-trail-localhost/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web).
+This plugin is an add-on for the Term and Category Based Posts Widget and available here <a target="_blank" herf="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.
 
 ### Features
 * Option to allow HTML in the excerpt
@@ -29,6 +25,12 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 * Option to hide shortcode
 * Option to hide social buttons, banners, shortcodes and more used in the excerpt
 * Option to show social buttons, banners, shortcodes and more only once in the outputed excerpt
+
+### Try before buy
+
+With Term and Category Based Posts Widget version 4.7 or higher we let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host IP address of 127.0.0.1).
+
+Download the Term and Category Based Posts Widget for a free trail from here: [tiptoppress.com/free-trail-localhost](http://tiptoppress.com/free-trail-localhost/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web).
 
 ## Screenshot
 Adds more options for the excerpt output
