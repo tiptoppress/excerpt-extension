@@ -176,12 +176,12 @@ function cpwp_before_itemHTML($widget,$instance) {
 		add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 9999);
 	}
 	
-	add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons_filter');
+	add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons_filter');
 
 	if(isset($instance['allow_html_excerpt']) && ($instance['allow_html_excerpt']))
 	{
 		remove_filter('get_the_excerpt', 'wp_trim_excerpt');
-		add_filter('the_excerpt', 'termCategoryPostsPro\excerptExtension\allow_html_filter');
+		add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\allow_html_filter');
 	}
 }
 
@@ -202,7 +202,7 @@ function cpwp_after_itemHTML($widget,$instance) {
 	remove_filter('excerpt_length', array($widget,'excerpt_length_filter'));
 	remove_filter('excerpt_more', array($widget,'excerpt_more_filter'));
 	add_filter('get_the_excerpt', 'wp_trim_excerpt');
-	remove_filter('the_excerpt', array($widget,'apply_the_excerpt'));
+	remove_filter('cpwp_excerpt', array($widget,'apply_the_excerpt'));
 }
 
 add_action('cpwp_after_itemHTML',__NAMESPACE__.'\cpwp_after_itemHTML',10,2);
