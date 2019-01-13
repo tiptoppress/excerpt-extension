@@ -2,8 +2,8 @@
 Contributors: kometschuh
 Tags: content, formatting, post, post-excerpt, excerpt
 Requires at least: 2.8
-Tested up to: 4.8
-Stable tag: 4.8
+Tested up to: 5.0
+Stable tag: 4.8.1
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,7 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 
 = 4.8 - September 10th 2017 =
 * Add a option excerpt length in characters
+
 = 4.7.1 - November 28 2017 =
 * Bugfix If Theme excerpt_more is not set
 
