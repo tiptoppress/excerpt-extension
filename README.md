@@ -18,6 +18,7 @@ The Excerpt Extension adds more options for the excerpt output.
 This plugin is an add-on for the Term and Category Based Posts Widget and available here <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.
 
 ### Features
+* Polyfill excerpt 'line-clamp' for IE and FF
 * Option to allow HTML in the excerpt
 * Option to override Theme and plugin excerpt lenght filters
 * Option to override Theme and plugin excerpt more filters
@@ -58,13 +59,16 @@ While using this plugin if you find any bug or any conflict, please submit an is
 5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
 
 ## Changelog
-#### 4.8 - September 10th 2017 =
+#### 4.9 - March 03nd 2019
+* Add a polyfill excerpt 'line-clamp' for IE and FF
+
+#### 4.8 - September 10th 2017
 * Add a option excerpt length in characters
 
-#### 4.7.1 - November 28 2017 =
+#### 4.7.1 - November 28 2017
 * Bugfix If Theme excerpt_more is not set
 
-#### 4.7 - September 10th 2017 =
+#### 4.7 - September 10th 2017
 * Add a option to hide shortcode
 
 #### 0.1 - December 17th 2016

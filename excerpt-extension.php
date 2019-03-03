@@ -208,6 +208,33 @@ function cpwp_after_itemHTML($widget,$instance) {
 add_action('cpwp_after_itemHTML',__NAMESPACE__.'\cpwp_after_itemHTML',10,2);
 
 /**
+ * Add 'line-clamp' polyfill for IE and FF
+ *
+ */
+function line_clamp_poly_script() {
+	// IE or FF
+	$user_agent = $_SERVER['HTTP_USER_AGENT'];
+	if (preg_match( '/MSIE/i', $user_agent ) || preg_match( '/Firefox/i', $user_agent ) ) {
+		?>
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				jQuery('.cat-post-item p').each(function(index, element) {
+					var height = parseInt(jQuery(element).css('line-height')),
+						count = jQuery('.cat-post-item p').css('-webkit-line-clamp')
+					if (height == 'normal') {
+						height = parseInt(jQuery(element).css('font-size')) * 1.2;
+					}
+					jQuery(element).css({'line-height' : height + 'px', 'max-height' : (height * count) + 'px'});
+				});
+			});
+		</script>
+	<?php
+	}
+}
+
+add_action( 'wp_footer', __NAMESPACE__ . '\line_clamp_poly_script', 10 );
+
+/**
  * Panel "More Excerpt Options"
  *
  * @param this
