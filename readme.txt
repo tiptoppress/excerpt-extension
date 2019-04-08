@@ -2,7 +2,7 @@
 Contributors: kometschuh
 Tags: content, formatting, post, post-excerpt, excerpt
 Requires at least: 2.8
-Tested up to: 5.0
+Tested up to: 5.1
 Stable tag: 4.9
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,6 @@ The Excerpt Extension adds more options for the excerpt output.
 
 = Features =
 
-* Polyfill excerpt 'line-clamp' for IE and FF
 * Option to allow HTML in the excerpt
 * Option to override Theme and plugin excerpt lenght filters
 * Option to override Theme and plugin excerpt more filters
@@ -71,12 +70,8 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 
 == Changelog ==
 
-= 4.9 - March 03nd 2019 =
-* Add a polyfill excerpt 'line-clamp' for IE and FF
-
 = 4.8 - September 10th 2017 =
 * Add a option excerpt length in characters
-
 = 4.7.1 - November 28 2017 =
 * Bugfix If Theme excerpt_more is not set
 
