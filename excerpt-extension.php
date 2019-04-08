@@ -4,7 +4,7 @@ Plugin Name: Excerpt Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: Adds more excerpt options to the details pannel in the widgets admin from the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
-Version: 4.8.1
+Version: 4.9.1
 Author URI: http://tiptoppress.com
 */
 
@@ -75,7 +75,7 @@ function excerpt_length_in_chars_filter($text) {
 		else 
 			$length = 55; // use default
 	
-		if($source == "content" ? ($excerpt = get_the_content()) : ($excerpt = get_the_excerpt()));
+		$excerpt = get_the_content();
 		$excerpt = preg_replace(" (\[.*?\])",'',$excerpt);
 		$excerpt = strip_shortcodes($excerpt);
 		$excerpt = strip_tags($excerpt);
