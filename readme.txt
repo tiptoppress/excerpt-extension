@@ -2,7 +2,7 @@
 Contributors: kometschuh
 Tags: content, formatting, post, post-excerpt, excerpt
 Requires at least: 2.8
-Tested up to: 5.1
+Tested up to: 5.2
 Stable tag: 4.9
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,7 +14,7 @@ A free extension for the premium widget Term and Category Based Posts Widget
 The Excerpt Extension adds more options for the excerpt output. 
 
 <blockquote>
-<p>This plugin is an add-on for the Term and Category Based Posts Widget and available here <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.</p>
+<p>This plugin is an add-on for the Term and Category Based Posts Widget and available here <a target="_blank" href="http://tiptoppress.com/">tiptoppress.com</a>.</p>
 </blockquote>
 
 = Features =
@@ -26,11 +26,12 @@ The Excerpt Extension adds more options for the excerpt output.
 * Option to hide shortcode
 * Option to hide social buttons, banners, shortcodes and more used in the excerpt
 * Option to show social buttons, banners, shortcodes and more only once in the outputed excerpt
+* Polyfill excerpt 'line-clamp' for IE and FF
 
 <blockquote>
 <h4>Try before buy</h4>
 <p>With Term and Category Based Posts Widget version 4.7 or higher we let people download a version which will not require a license as long as it is used on a local development server (in other words, a localhost or if the site domain resolves to the local host IP address of 127.0.0.1).</p>
-<p>Download the Term and Category Based Posts Widget for a free trail from here: <a target="_blank" href="http://tiptoppress.com/free-trail-localhost/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web">tiptoppress.com/free-trail-localhost</a>.</p>
+<p>Download the Term and Category Based Posts Widget for a free trail from here: <a target="_blank" href="http://tiptoppress.com/free-trail-localhost/">tiptoppress.com/free-trail-localhost</a>.</p>
 </blockquote>
 
 = Contribute =
@@ -43,15 +44,15 @@ While using this plugin if you find any bug or any conflict, please submit an is
 Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t need to leave your web browser. To do an automatic install of Category Posts Widget, 
 
 1. Log in to your WordPress dashboard, navigate to the Plugins menu and click Add New. 
-2. In the search field type "Excerpt Extension" and click Search Plugins. 
-3. Once you’ve found plugin, you can install it by simply clicking "Install Now".
+2. In the search field type 'Excerpt Extension' and click Search Plugins. 
+3. Once you’ve found plugin, you can install it by simply clicking 'Install Now'.
 4. Then, go to plugins page of WordPress admin activate the plugin. 
 5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
 
 = Manual installation =
 
-1. The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/?utm_source=github&utm_campaign=installation_eext&utm_medium=web) is being expected.
-2. Download the Excerpt Extension.
+1. The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/) is being expected.
+2. Download the Excerpt Extension add-on.
 3. Upload it to the plugins folder of your blog.
 4. Activate the plugin through the 'Plugins' menu in WordPress
 5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
@@ -60,7 +61,11 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 = I can't see the widget =
 This is only a extension for the premium widget Term and Category Based Posts Widget.
-The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/?utm_source=github&utm_campaign=installation_eext&utm_medium=web) is being expected.
+The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com/) is being expected.
+
+= How the polyfill for Excerpt length in lines for FireFox and IE works =
+Just install the add-on and activate it.
+It's a line of Javascript code which is added to your website's front end footer, only if your blog reader use FF or IE.
 
 == Screenshots ==
 
@@ -70,8 +75,12 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 
 == Changelog ==
 
+= 4.9 - March 03nd 2019 =
+* Add a polyfill excerpt 'line-clamp' for IE and FF
+
 = 4.8 - September 10th 2017 =
 * Add a option excerpt length in characters
+
 = 4.7.1 - November 28 2017 =
 * Bugfix If Theme excerpt_more is not set
 
