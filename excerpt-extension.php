@@ -75,7 +75,12 @@ function excerpt_length_in_chars_filter($text) {
 		else 
 			$length = 55; // use default
 	
-		$excerpt = get_the_content();
+		if ( has_excerpt() ) {
+			$text = get_the_excerpt();
+			$length = 9999;
+		} else { 
+			$excerpt = get_the_content();
+		}
 		$excerpt = preg_replace(" (\[.*?\])",'',$excerpt);
 		$excerpt = strip_shortcodes($excerpt);
 		$excerpt = strip_tags($excerpt);
@@ -107,9 +112,15 @@ function allow_html_filter($text) {
 	global $settings, $extension, $wp_filter;
 
 	$allowed_elements = '<script>,<style>,<video>,<audio>,<br>,<em>,<strong>,<i>,<ul>,<ol>,<li>,<a>,<p>,<span>,<img><h1>,<h2>,<h3>,<h4>,<h5>,<h6>';
-	$new_excerpt_length = ( isset($settings["excerpt_length"]) && $settings["excerpt_length"] > 0 ) ? $settings["excerpt_length"] : 55;
+	
+	if ( has_excerpt() ) {
+		$text = get_the_excerpt();
+		$excerpt_length = 9999;
+	} else { 
+		$text = get_the_content('');
+		$excerpt_length = ( isset($settings["excerpt_length"]) && $settings["excerpt_length"] > 0 ) ? $settings["excerpt_length"] : 55;	
+	}
 
-	$text = get_the_content('');
 	if (isset($settings['hide_shortcode']) && ($settings['hide_shortcode']))
 	{
 		$text = strip_shortcodes( $text );
@@ -122,7 +133,6 @@ function allow_html_filter($text) {
 	$text = str_replace('\]\]\>', ']]&gt;', $text);
 	$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);		
 	$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
-	$excerpt_length = $new_excerpt_length;		
 	if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '')
 	{
 		$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
@@ -137,7 +147,7 @@ function allow_html_filter($text) {
 	}
 	
 	$words = explode(' ', $text, $excerpt_length + 1);
-	if (count($words)> $excerpt_length) {
+	if (count($words) > $excerpt_length) {
 		array_pop($words);
 		array_push($words, $excerpt_more);
 		$text = implode(' ', $words);

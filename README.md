@@ -79,6 +79,9 @@ Solves the double rendered shortcode bug in the excerpt
 ![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-3.PNG?raw=true "Solves the double rendered shortcode bug in the excerpt")
 
 ## Changelog
+#### 4.9.2 - March 23 2020
+* Bugfix Use the Optional Excerpt if available
+
 #### 4.9 - March 03nd 2019
 * Add a polyfill excerpt 'line-clamp' for IE and FF
 
