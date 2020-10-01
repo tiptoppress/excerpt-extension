@@ -2,8 +2,8 @@
 Contributors: kometschuh
 Tags: content, formatting, post, post-excerpt, excerpt
 Requires at least: 2.8
-Tested up to: 5.3
-Stable tag: 4.9.2
+Tested up to: 5.5
+Stable tag: 4.9.5
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,9 @@ It's a line of Javascript code which is added to your website's front end footer
 3. Solves the double rendered shortcode bug in the excerpt.
 
 == Changelog ==
+
+= 4.9.5 - Oktober 01 2020 =
+* Bugfix Found two non-unique IDs
 
 = 4.9.2 - March 23 2020 =
 * Bugfix Use the Optional Excerpt if available

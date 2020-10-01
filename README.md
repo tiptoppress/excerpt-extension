@@ -79,6 +79,10 @@ Solves the double rendered shortcode bug in the excerpt
 ![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-3.PNG?raw=true "Solves the double rendered shortcode bug in the excerpt")
 
 ## Changelog
+
+#### 4.9.5 - Oktober 01 2020
+* Bugfix Found two non-unique IDs
+
 #### 4.9.2 - March 23 2020
 * Bugfix Use the Optional Excerpt if available
 
