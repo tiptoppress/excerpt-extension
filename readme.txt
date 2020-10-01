@@ -3,7 +3,7 @@ Contributors: kometschuh
 Tags: content, formatting, post, post-excerpt, excerpt
 Requires at least: 2.8
 Tested up to: 5.5
-Stable tag: 4.9.6
+Stable tag: 4.9.7
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,7 @@ The Excerpt Extension adds more options for the excerpt output.
 = Features =
 
 * Option to allow HTML in the excerpt
+* Option to remove the excerpt 'more' text
 * Option to override Theme and plugin excerpt lenght filters
 * Option to override Theme and plugin excerpt more filters
 * Option excerpt length in characters
@@ -74,6 +75,9 @@ It's a line of Javascript code which is added to your website's front end footer
 3. Solves the double rendered shortcode bug in the excerpt.
 
 == Changelog ==
+
+= 4.9.7 - Oktober 01 2020 =
+* Bugfix Remove the excerpt 'more' text
 
 = 4.9.6 - Oktober 01 2020 =
 * Bugfix Show social buttons only once, not the first post

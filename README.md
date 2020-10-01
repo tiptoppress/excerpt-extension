@@ -19,6 +19,7 @@ This plugin is an add-on for the Term and Category Based Posts Widget and availa
 
 ### Features
 * Option to allow HTML in the excerpt
+* Option to remove the excerpt 'more' text
 * Option to override Theme and plugin excerpt lenght filters
 * Option to override Theme and plugin excerpt more filters
 * Option excerpt length in characters
@@ -79,6 +80,9 @@ Solves the double rendered shortcode bug in the excerpt
 ![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-3.PNG?raw=true "Solves the double rendered shortcode bug in the excerpt")
 
 ## Changelog
+
+#### 4.9.7 - Oktober 01 2020
+* Bugfix Remove the excerpt 'more' text
 
 #### 4.9.6 - Oktober 01 2020
 * Bugfix Show social buttons only once, not the first post

@@ -4,7 +4,7 @@ Plugin Name: Excerpt Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: Adds more excerpt options to the details pannel in the widgets admin from the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
-Version: 4.9.6
+Version: 4.9.7
 Author URI: http://tiptoppress.com
 */
 
@@ -55,7 +55,7 @@ function apply_the_excerpt_social_buttons_filter($text) {
  * @return excerpt with the set length in characters
  *
  */
-function excerpt_length_in_chars_filter($text) {
+function excerpt_length_in_chars_filter( $text ) {
 
 	global $settings;		
 	$excerpt = $text;
@@ -149,6 +149,17 @@ function allow_html_filter($text) {
 }
 
 /**
+ * Remove excerpt more
+ *
+ * @param excerpt more
+ * @return empty excerpt
+ *
+ */
+function no_excerpt_more( $more ) {
+	return '';
+}
+
+/**
  * Filter to call functions
  *
  * @param this
@@ -186,6 +197,11 @@ function cpwp_before_itemHTML($widget,$instance) {
 		if (isset($settings["show_social_buttons_only_once"]) && $settings["show_social_buttons_only_once"]) {
 			remove_all_filters('the_content');
 		}
+	}
+
+	// Remove excerpt more
+	if (isset($settings["no_excerpt_more"]) && $settings["no_excerpt_more"]) {
+		add_filter('excerpt_more', 'termCategoryPostsPro\excerptExtension\no_excerpt_more');
 	}
 
 	// Allow HTML excerpt
@@ -291,6 +307,7 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 		$alt_prefix.'allow_html_excerpt'            => false,
 		$alt_prefix.'show_social_buttons_only_once' => false,
 		$alt_prefix.'excerpt_length_in_chars'       => false,
+		$alt_prefix.'no_excerpt_more'               => false,
 		// widget options
 		$alt_prefix.'excerpt_filters'               => '',
 	) );
@@ -303,6 +320,7 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 	$allow_html_excerpt              = $instance[$alt_prefix.'allow_html_excerpt'];
 	$show_social_buttons_only_once   = $instance[$alt_prefix.'show_social_buttons_only_once'];
 	$excerpt_length_in_chars         = $instance[$alt_prefix.'excerpt_length_in_chars'];
+	$no_excerpt_more                 = $instance[$alt_prefix.'no_excerpt_more'];
 	// widget options
 	$excerpt_filters                 = $instance[$alt_prefix.'excerpt_filters'];
 
@@ -383,6 +401,12 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 						<?php _e( 'Show social buttons only once','categorypostspro' ); ?>
 				</label>
 			</p>
+			<p>
+				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."no_excerpt_more"); ?>">
+					<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."no_excerpt_more"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."no_excerpt_more"); ?>"<?php checked( (bool) $no_excerpt_more, true ); ?> />
+						<?php _e( 'Remove the excerpt \'more\' text','categorypostspro' ); ?>
+				</label>
+			</p>
 		</div>
 	</div>
 	<?php
@@ -412,6 +436,9 @@ function cpwp_default_settings($setting) {
 		'alt_allow_html_excerpt'            => false,
 		'show_social_buttons_only_once'     => false,
 		'alt_show_social_buttons_only_once' => false,
+		'no_excerpt_more'                   => false,
+		'alt_no_excerpt_more'               => false,
+		// widget options
 		'excerpt_length_in_chars'           => false,
 		'alt_excerpt_length_in_chars'       => false,
 	) );
