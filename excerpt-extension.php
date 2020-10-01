@@ -4,7 +4,7 @@ Plugin Name: Excerpt Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: Adds more excerpt options to the details pannel in the widgets admin from the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
-Version: 4.9.5
+Version: 4.9.6
 Author URI: http://tiptoppress.com
 */
 
@@ -28,8 +28,7 @@ function apply_the_excerpt_social_buttons_filter($text) {
 	global $settings;		
 	$ret = "";
 	
-	if (isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"])
-	{
+	if (isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"]) {
 		// length
 		if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
 			$length = (int) $instance['excerpt_length'];
@@ -42,16 +41,9 @@ function apply_the_excerpt_social_buttons_filter($text) {
 			$more_text = ltrim($settings["excerpt_more_text"]);
 		$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 		$ret = \wp_trim_words( $text, $length, $excerpt_more_text );
-	} 
-	else {
-		if (isset($settings["show_social_buttons_only_once"]) && $settings["show_social_buttons_only_once"]) {
-			$ret = $text;
-			remove_all_filters('the_content');
-		 }
-		else {
-			$ret = "";
-			$ret = $text;
-		}
+	} else {
+		$ret = "";
+		$ret = $text;
 	}
 	return $ret;
 }
@@ -186,8 +178,17 @@ function cpwp_before_itemHTML($widget,$instance) {
 		add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 9999);
 	}
 	
+	// Solical button filter
 	add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons_filter');
 
+	// Show social buttons only once
+	if ( ! ( isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"] ) ) {
+		if (isset($settings["show_social_buttons_only_once"]) && $settings["show_social_buttons_only_once"]) {
+			remove_all_filters('the_content');
+		}
+	}
+
+	// Allow HTML excerpt
 	if(isset($instance['allow_html_excerpt']) && ($instance['allow_html_excerpt']))
 	{
 		remove_filter('get_the_excerpt', 'wp_trim_excerpt');

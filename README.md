@@ -80,6 +80,9 @@ Solves the double rendered shortcode bug in the excerpt
 
 ## Changelog
 
+#### 4.9.6 - Oktober 01 2020
+* Bugfix Show social buttons only once, not the first post
+
 #### 4.9.5 - Oktober 01 2020
 * Bugfix Found two non-unique IDs
 
