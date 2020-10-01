@@ -77,7 +77,7 @@ It's a line of Javascript code which is added to your website's front end footer
 == Changelog ==
 
 = 4.9.7 - Oktober 01 2020 =
-* Bugfix Remove the excerpt 'more' text
+* Option Remove the excerpt 'more' text
 
 = 4.9.6 - Oktober 01 2020 =
 * Bugfix Show social buttons only once, not the first post
