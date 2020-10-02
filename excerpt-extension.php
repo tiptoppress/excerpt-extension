@@ -180,13 +180,13 @@ function cpwp_before_itemHTML($widget,$instance) {
 	// Excerpt length filter
 	if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 &&
 			isset($instance["excerpt_override_length"]) && $instance["excerpt_override_length"]) {
-		add_filter('excerpt_length', array($widget, 'excerpt_length_filter'), 9999);
+		add_filter('excerpt_length', array($widget, 'excerpt_length_filter'), 20);
 	}
 	
 	if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' &&
 			isset($instance["excerpt_override_more_text"]) && $instance["excerpt_override_more_text"])
 	{
-		add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 9999);
+		add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 20);
 	}
 	
 	// Solical button filter
@@ -201,7 +201,7 @@ function cpwp_before_itemHTML($widget,$instance) {
 
 	// Remove excerpt more
 	if (isset($settings["no_excerpt_more"]) && $settings["no_excerpt_more"]) {
-		add_filter('excerpt_more', 'termCategoryPostsPro\excerptExtension\no_excerpt_more');
+		add_filter('excerpt_more', 'termCategoryPostsPro\excerptExtension\no_excerpt_more', 20);
 	}
 
 	// Allow HTML excerpt
@@ -310,6 +310,7 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 		$alt_prefix.'no_excerpt_more'               => false,
 		// widget options
 		$alt_prefix.'excerpt_filters'               => '',
+		$alt_prefix.'excerpt_length'                => '',
 	) );
 	
 	// extension options
@@ -323,6 +324,7 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 	$no_excerpt_more                 = $instance[$alt_prefix.'no_excerpt_more'];
 	// widget options
 	$excerpt_filters                 = $instance[$alt_prefix.'excerpt_filters'];
+	$excerpt_length                  = $instance[$alt_prefix.'excerpt_length'];
 
 	?>
 
@@ -365,18 +367,18 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 		</p>
 		<?php // Adds more Excerpt options ?>
 		<div class="cpwp_ident categoryposts-data-panel-<?php echo $alt_prefix ?>excerpt-filter" style="border-left-color: #44809e;display:<?php echo ((bool) $instance[$alt_prefix.'excerpt_filters']) ? 'block' : 'none'?>">
-			<p>
+			<!-- <p>
 				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>">
 					<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
 					<?php _e( 'Use widget excerpt length','categorypostspro' ); ?>
 				</label>
-			</p>
-			<p>
+			</p> -->
+			<!-- <p>
 				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>">
 					<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_more_text"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
 					<?php _e( 'Use widget excerpt \'more\' text','categorypostspro' ); ?>
 				</label>
-			</p>
+			</p> -->
 			<p>
 				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."allow_html_excerpt"); ?>">
 					<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."allow_html_excerpt"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."allow_html_excerpt"); ?>"<?php checked( (bool) $allow_html_excerpt, true ); ?> />
@@ -405,6 +407,12 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."no_excerpt_more"); ?>">
 					<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."no_excerpt_more"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."no_excerpt_more"); ?>"<?php checked( (bool) $no_excerpt_more, true ); ?> />
 						<?php _e( 'Remove the excerpt \'more\' text','categorypostspro' ); ?>
+				</label>
+			</p>
+			<p>
+				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_length"); ?>">
+					<input style="text-align: center; border-color:#b2cedd;" type="number" min="0" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_length"); ?>" value="<?php echo $excerpt_length; ?>" />
+					<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
 				</label>
 			</p>
 		</div>
@@ -441,6 +449,8 @@ function cpwp_default_settings($setting) {
 		// widget options
 		'excerpt_length_in_chars'           => false,
 		'alt_excerpt_length_in_chars'       => false,
+		'excerpt_length'                    => 55,
+		'alt_excerpt_length'                => 55,
 	) );
 }
 
