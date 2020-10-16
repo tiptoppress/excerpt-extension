@@ -329,15 +329,34 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 	?>
 
 	<script type="text/javascript">
-		if (typeof jQuery !== 'undefined')  {
+		if (typeof jQuery !== 'undefined') {
+
+			// namespace
+			var exex_namespace = {
+				// Show hide excerpt filter options
+				toggleExcerptFilter: function(item) {
+					var panel = item.parentElement.parentElement.parentElement;
+					if (item.checked) {
+						jQuery(panel).find('.categoryposts-data-panel-excerpt-filters').show();
+					} else {
+						jQuery(panel).find('.categoryposts-data-panel-excerpt-filters').hide();
+					}
+					
+				}
+			}
+
 			jQuery( document ).ready(function () {
 				var _moreExcerptOpt = jQuery( "[data-panel='<?php echo $alt_prefix ?>details'] + div > .categorypostspro-data-panel-excerpt" );
-
 				_moreExcerptOpt.each(function( index, element) {
 					var _element = jQuery( element );
 
 					_element.find( '.termcategoryPostsPro-excerpt_length' ).after( jQuery( _element.closest( '.widget-content' ).find( '.categoryposts-data-panel-<?php echo $alt_prefix ?>excerpt-length-char' ) ) );
 					_element.append( jQuery( _element.closest( '.widget-content' ).find( '.categoryposts-data-panel-<?php echo $alt_prefix ?>use-excerpt-filter' ) ) );
+				});
+
+				// toggle UI excerpt filter options
+				jQuery( 'div[id$="<?php echo $widget->id ?>"] .cpwp-<?php echo $alt_prefix; ?>use-excerpt-filter input[type=checkbox]').change( function(event) {
+					exex_namespace.toggleExcerptFilter(this);
 				});
 			});
 		}
@@ -356,7 +375,7 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 	
 	<?php // Adds more Excerpt options ?>
 	<div class="cpwp_ident categoryposts-data-panel-<?php echo $alt_prefix ?>use-excerpt-filter" style="border-left-color: #44809e;">
-		<p>
+		<p class="cpwp-<?php echo $alt_prefix; ?>use-excerpt-filter">
 			<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt_filters"); ?>" onchange="javascript:cpwp_namespace.togglePostDetailsExcerptFilterPanel(this)">
 				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_filters"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
 				<?php _e( 'Don\'t override Themes and plugin filters','categorypostspro' ); ?>
@@ -366,7 +385,7 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 			</label>
 		</p>
 		<?php // Adds more Excerpt options ?>
-		<div class="cpwp_ident categoryposts-data-panel-<?php echo $alt_prefix ?>excerpt-filter" style="border-left-color: #44809e;display:<?php echo ((bool) $instance[$alt_prefix.'excerpt_filters']) ? 'block' : 'none'?>">
+		<div class="cpwp_ident categoryposts-data-panel-<?php echo $alt_prefix ?>excerpt-filters" style="border-left-color: #44809e;display:<?php echo ((bool) $instance[$alt_prefix.'excerpt_filters']) ? 'block' : 'none'?>">
 			<!-- <p>
 				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>">
 					<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_override_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
