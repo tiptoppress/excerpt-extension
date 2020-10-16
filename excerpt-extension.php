@@ -4,7 +4,7 @@ Plugin Name: Excerpt Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: Adds more excerpt options to the details pannel in the widgets admin from the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
-Version: 4.9.7
+Version: 4.9.8
 Author URI: http://tiptoppress.com
 */
 
@@ -23,28 +23,33 @@ const TEXTDOMAIN = 'excerpt-extension';
  * @return excerpt with social buttons, banner, etc. or not
  *
  */
-function apply_the_excerpt_social_buttons_filter($text) {
+function apply_widget_the_excerpt_filter( $text ) {
 
-	global $settings;		
-	$ret = "";
-	
-	if (isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"]) {
-		// length
-		if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
-			$length = (int) $instance['excerpt_length'];
-		else 
-			$length = 55; // use default
-	
-		// more text
+	global $settings;
+
+	// length
+	if (isset($settings['excerpt_length']) && ($settings['excerpt_length'] > 0))
+	{
+		$length = (int) $settings['excerpt_length'];
+	}
+	else
+	{
+		$length = 55; // use default
+	}
+
+	// more text
+	$excerpt_more_text = "";
+	if ( ! ( isset( $settings["no_excerpt_more"] ) && $settings["no_excerpt_more"] ) )
+	{
 		$more_text = '[&hellip;]';
 		if( isset($settings["excerpt_more_text"]) && $settings["excerpt_more_text"] )
+		{
 			$more_text = ltrim($settings["excerpt_more_text"]);
+		}
 		$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
-		$ret = \wp_trim_words( $text, $length, $excerpt_more_text );
-	} else {
-		$ret = "";
-		$ret = $text;
 	}
+	$ret = \wp_trim_words( $text, $length, $excerpt_more_text );
+
 	return $ret;
 }
 
@@ -57,41 +62,54 @@ function apply_the_excerpt_social_buttons_filter($text) {
  */
 function excerpt_length_in_chars_filter( $text ) {
 
-	global $settings;		
-	$excerpt = $text;
+	global $settings;
 	
-	if (isset($settings["excerpt_length_in_chars"]) && $settings["excerpt_length_in_chars"]) {
-		// length
-		if (isset($settings['excerpt_length']) && ($settings['excerpt_length'] > 0))
-			$length = (int) $settings['excerpt_length'];
-		else 
-			$length = 55; // use default
-	
-		if ( has_excerpt() ) {
-			$text = get_the_excerpt();
-			$length = 9999;
-		} else { 
-			$excerpt = get_the_content();
-		}
-		$excerpt = preg_replace(" (\[.*?\])",'',$excerpt);
-		$excerpt = strip_shortcodes($excerpt);
-		$excerpt = strip_tags($excerpt);
-		$excerpt = substr($excerpt, 0, $length);
-		// $excerpt = substr($excerpt, 0, strripos($excerpt, " ")); // no word breaks
-		$excerpt = trim(preg_replace( '/\s+/', ' ', $excerpt));
-		
-		// more text
-		if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '')
-			$excerpt .= ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
-		else if($filterName = key($wp_filter['excerpt_more'][10]))
-			$excerpt .= " " . $wp_filter['excerpt_more'][10][$filterName]['function'](0);
-		else
-			$excerpt .= ' [...]';
+	// length
+	if (isset($settings['excerpt_length']) && ($settings['excerpt_length'] > 0))
+	{
+		$length = (int) $settings['excerpt_length'];
 	}
+	else
+	{
+		$length = 55; // use default
+	}
+	
+	$text = "";
+	if ( has_excerpt() )
+	{
+		$text = get_the_excerpt();
+		$length = 9999;
+	}
+	else
+	{
+		$text = get_the_content();
+	}
+	$excerpt = preg_replace(" (\[.*?\])", '', $text);
+	$excerpt = strip_shortcodes($excerpt);
+	$excerpt = strip_tags($excerpt);
+	$excerpt = substr($excerpt, 0, $length);
+	// $excerpt = substr($excerpt, 0, strripos($excerpt, " ")); // no word breaks
+	$excerpt = trim(preg_replace( '/\s+/', ' ', $excerpt));
+	
+	// more text
+	if ( ! ( isset($settings["no_excerpt_more"] ) && $settings["no_excerpt_more"] ) )
+	{
+		if( isset($settings["excerpt_more_text"] ) && ltrim( $settings["excerpt_more_text"] ) != '' )
+		{
+			$excerpt .= ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html( $settings["excerpt_more_text"] ) . '</a>';
+		}
+		else if ( $filterName = key( $wp_filter['excerpt_more'][10] ) )
+		{
+			$excerpt .= " " . $wp_filter['excerpt_more'][10][$filterName]['function'](0);
+		}
+		else
+		{
+			$excerpt .= ' [...]';
+		}
+	}
+
 	return $excerpt;
 }
-
-add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\excerpt_length_in_chars_filter');
 
 /**
  * Excerpt allow HTML
@@ -100,8 +118,9 @@ add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\excerpt_length
  * @return excerpt with allowed html
  *
  */
-function allow_html_filter($text) {
-	global $settings, $extension, $wp_filter;
+function allow_html_filter( $text ) {
+
+	global $settings, $wp_filter;
 
 	$allowed_elements = '<script>,<style>,<video>,<audio>,<br>,<em>,<strong>,<i>,<ul>,<ol>,<li>,<a>,<p>,<span>,<img><h1>,<h2>,<h3>,<h4>,<h5>,<h6>';
 	
@@ -125,17 +144,21 @@ function allow_html_filter($text) {
 	$text = str_replace('\]\]\>', ']]&gt;', $text);
 	$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);		
 	$text = strip_tags($text, htmlspecialchars_decode($allowed_elements));
-	if( isset($settings["excerpt_more_text"]) && ltrim($settings["excerpt_more_text"]) != '')
-	{
-		$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($settings["excerpt_more_text"]) . '</a>';
-	}
-	else if(isset($wp_filter['excerpt_more'][10]) && $wp_filter['excerpt_more'][10] && $filterName = key($wp_filter['excerpt_more'][10]))
-	{
-		$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
-	}
-	else
-	{
-		$excerpt_more = '[...]';
+
+	$excerpt_more = "";
+	if ( ! ( isset($settings["no_excerpt_more"] ) && $settings["no_excerpt_more"] ) ) {
+		if( isset( $settings["excerpt_more_text"] ) && ltrim( $settings["excerpt_more_text"] ) != '')
+		{
+			$excerpt_more = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html( $settings["excerpt_more_text"] ) . '</a>';
+		}
+		else if( isset($wp_filter['excerpt_more'][10] ) && $wp_filter['excerpt_more'][10] && $filterName = key( $wp_filter['excerpt_more'][10] ) )
+		{
+			$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
+		}
+		else
+		{
+			$excerpt_more = '[...]';
+		}
 	}
 	
 	$words = explode(' ', $text, $excerpt_length + 1);
@@ -144,19 +167,9 @@ function allow_html_filter($text) {
 		array_push($words, $excerpt_more);
 		$text = implode(' ', $words);
 	}
+	$text = str_replace('<p>', '<p class="cpwp-excerpt-text">', $text);
 
 	return '<p>' . $text . '</p>';
-}
-
-/**
- * Remove excerpt more
- *
- * @param excerpt more
- * @return empty excerpt
- *
- */
-function no_excerpt_more( $more ) {
-	return '';
 }
 
 /**
@@ -166,20 +179,24 @@ function no_excerpt_more( $more ) {
  * @param instance
  *
  */
-function cpwp_before_itemHTML($widget,$instance) {
+function cpwp_before_itemHTML( $widget, $instance ) {
 
-	global $settings, $extension;
+	global $settings;
 	$settings = $instance;
-	$extension = $widget;
 
-	if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
+	if ( isset($instance['excerpt_length'] ) && ( $instance['excerpt_length'] > 0 ) )
+	{
 		$length = (int) $instance['excerpt_length'];
-	else 
+	}
+	else
+	{
 		$length = 0; // indicate that invalid length is set	
+	}
 
 	// Excerpt length filter
 	if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 &&
-			isset($instance["excerpt_override_length"]) && $instance["excerpt_override_length"]) {
+			isset($instance["excerpt_override_length"]) && $instance["excerpt_override_length"])
+	{
 		add_filter('excerpt_length', array($widget, 'excerpt_length_filter'), 20);
 	}
 	
@@ -188,24 +205,32 @@ function cpwp_before_itemHTML($widget,$instance) {
 	{
 		add_filter('excerpt_more', array($widget,'excerpt_more_filter'), 20);
 	}
-	
-	// Solical button filter
-	add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\apply_the_excerpt_social_buttons_filter');
 
 	// Show social buttons only once
-	if ( ! ( isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"] ) ) {
+	if ( ! ( isset($settings["hide_social_buttons"]) && $settings["hide_social_buttons"] ) )
+	{
 		if (isset($settings["show_social_buttons_only_once"]) && $settings["show_social_buttons_only_once"]) {
 			remove_all_filters('the_content');
 		}
 	}
 
-	// Remove excerpt more
-	if (isset($settings["no_excerpt_more"]) && $settings["no_excerpt_more"]) {
-		add_filter('excerpt_more', 'termCategoryPostsPro\excerptExtension\no_excerpt_more', 20);
+	// Widget excerpt 
+	// - Socical button filter
+	if ( isset( $settings["hide_social_buttons"] ) && $settings["hide_social_buttons"] ||
+		isset( $settings["no_excerpt_more"] ) && $settings["no_excerpt_more"] ||
+		isset($instance['excerpt_length'] ) && ( $instance['excerpt_length'] > 0 ) )
+	{
+		add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\apply_widget_the_excerpt_filter');
+	}
+
+	// Length in chars
+	if ( isset( $settings["excerpt_length_in_chars"] ) && $settings["excerpt_length_in_chars"] )
+	{
+		add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\excerpt_length_in_chars_filter');
 	}
 
 	// Allow HTML excerpt
-	if(isset($instance['allow_html_excerpt']) && ($instance['allow_html_excerpt']))
+	if( isset( $instance['allow_html_excerpt'] ) && ( $instance['allow_html_excerpt'] ) )
 	{
 		remove_filter('get_the_excerpt', 'wp_trim_excerpt');
 		add_filter('cpwp_excerpt', 'termCategoryPostsPro\excerptExtension\allow_html_filter');
@@ -346,41 +371,27 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 			}
 
 			jQuery( document ).ready(function () {
-				var _moreExcerptOpt = jQuery( "[data-panel='<?php echo $alt_prefix ?>details'] + div > .categorypostspro-data-panel-excerpt" );
-				_moreExcerptOpt.each(function( index, element) {
-					var _element = jQuery( element );
-
-					_element.find( '.termcategoryPostsPro-excerpt_length' ).after( jQuery( _element.closest( '.widget-content' ).find( '.categoryposts-data-panel-<?php echo $alt_prefix ?>excerpt-length-char' ) ) );
-					_element.append( jQuery( _element.closest( '.widget-content' ).find( '.categoryposts-data-panel-<?php echo $alt_prefix ?>use-excerpt-filter' ) ) );
+				// Move more excerpt options to sub-panel excerpt settings.
+				jQuery( "[data-panel='<?php echo $alt_prefix ?>details'] + div > .categorypostspro-data-panel-excerpt" ).each( function( index, element ) {
+					jQuery( element ).append( 
+						jQuery( jQuery(this).closest( '.widget-content' ).find( '.categoryposts-data-panel-<?php echo $alt_prefix ?>use-excerpt-filter' ) )
+					);
 				});
 
-				// toggle UI excerpt filter options
-				jQuery( 'div[id$="<?php echo $widget->id ?>"] .cpwp-<?php echo $alt_prefix; ?>use-excerpt-filter input[type=checkbox]').change( function(event) {
+				// Toggle UI excerpt filter options.
+				jQuery( 'div[id$="<?php echo $widget->id ?>"] .cpwp-<?php echo $alt_prefix; ?>use-excerpt-filter input[type=checkbox]').change( function( event ) {
 					exex_namespace.toggleExcerptFilter(this);
 				});
 			});
 		}
 	</script>
 
-
-	<?php // Adds more Excerpt options ?>
-	<div class="categoryposts-data-panel-<?php echo $alt_prefix ?>excerpt-length-char" style="border-left-color: #44809e;">
-		<p>
-			<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_length_in_chars"); ?>">
-				<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_length_in_chars"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_length_in_chars"); ?>"<?php checked( !empty($excerpt_length_in_chars), true ); ?> />
-				<?php _e( 'Set the excerpt lenght in characters','categorypostspro' ); ?>
-			</label>
-		</p>
-	</div>
-	
 	<?php // Adds more Excerpt options ?>
 	<div class="cpwp_ident categoryposts-data-panel-<?php echo $alt_prefix ?>use-excerpt-filter" style="border-left-color: #44809e;">
 		<p class="cpwp-<?php echo $alt_prefix; ?>use-excerpt-filter">
 			<label for="<?php echo $widget->get_field_id($alt_prefix."excerpt_filters"); ?>" onchange="javascript:cpwp_namespace.togglePostDetailsExcerptFilterPanel(this)">
 				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_filters"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
-				<?php _e( 'Don\'t override Themes and plugin filters','categorypostspro' ); ?>
-				
-				<span style="color:#07d;"><?php _e( '(Check to use the additional Excerpt Extension options.)','categorypostspro' ); ?></span>
+				<span style="color:#07d;"><?php _e( 'Check to use the additional Excerpt Extension options.','categorypostspro' ); ?></span>
 				
 			</label>
 		</p>
@@ -432,6 +443,12 @@ function form_details_panel( $widget, $instance, $alt_prefix ) {
 				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_length"); ?>">
 					<input style="text-align: center; border-color:#b2cedd;" type="number" min="0" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_length"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_length"); ?>" value="<?php echo $excerpt_length; ?>" />
 					<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
+				</label>
+			</p>
+			<p>
+				<label style="color:#07d;" for="<?php echo $widget->get_field_id($alt_prefix."excerpt_length_in_chars"); ?>">
+					<input style="border-color:#b2cedd;" type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id($alt_prefix."excerpt_length_in_chars"); ?>" name="<?php echo $widget->get_field_name($alt_prefix."excerpt_length_in_chars"); ?>"<?php checked( !empty($excerpt_length_in_chars), true ); ?> />
+					<?php _e( 'Set the excerpt lenght in characters','categorypostspro' ); ?>
 				</label>
 			</p>
 		</div>

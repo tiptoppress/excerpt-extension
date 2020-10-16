@@ -3,7 +3,7 @@ Contributors: kometschuh
 Tags: content, formatting, post, post-excerpt, excerpt
 Requires at least: 2.8
 Tested up to: 5.5
-Stable tag: 4.9.7
+Stable tag: 4.9.8
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ It's a line of Javascript code which is added to your website's front end footer
 3. Solves the double rendered shortcode bug in the excerpt.
 
 == Changelog ==
+
+= 4.9.8 - Oktober 16 2020 =
+* Option excerpt in length (words or characters)
 
 = 4.9.7 - Oktober 01 2020 =
 * Option Remove the excerpt 'more' text

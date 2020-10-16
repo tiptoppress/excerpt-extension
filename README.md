@@ -81,6 +81,9 @@ Solves the double rendered shortcode bug in the excerpt
 
 ## Changelog
 
+#### 4.9.8 - Oktober 16 2020
+* Option excerpt in length (words or characters)
+
 #### 4.9.7 - Oktober 01 2020
 * Option Remove the excerpt 'more' text
 
